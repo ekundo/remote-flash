@@ -1,0 +1,32 @@
+#include <timer0.h>
+#include <interrupt.h>
+
+#define TLSTART 256-16000000/1000/12/6
+
+unsigned long ml=0;
+uint8_t mcs=0;
+
+interrupt_isr_t0()
+{
+	TL0 = TLSTART;
+	if (mcs >= 6)
+	{
+		ml++;
+		mcs = 0;
+		if (ml > 4294967294)
+		{
+			ml = 0;
+		}
+	}
+	mcs++;
+}
+
+void millis_init()
+{
+	interrupt_control_global_enable();
+	interrupt_control_t0_enable();
+	timer0_configure(TIMER0_CONFIG_OPTION_MODE_3_TWO_8_BIT_CTRS_TMRS, TLSTART);
+	timer0_run();
+}
+
+#define millis() ml

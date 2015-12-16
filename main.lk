@@ -1,0 +1,74 @@
+-muwx
+-i main.ihx
+-M
+-Y
+-b HOME = 0x0000
+-b ISEG = 0x0000
+-b BSEG = 0x0000
+-k /usr/bin/../share/sdcc/lib/large
+-k /usr/share/sdcc/lib/large
+-l mcs51
+-l libsdcc
+-l libint
+-l liblong
+-l libfloat
+main.rel
+/mnt/workspace/nRF24LE1_SDK-master/_target_sdcc_nrf24le1_32/obj/delay/delay_ms.rel
+/mnt/workspace/nRF24LE1_SDK-master/_target_sdcc_nrf24le1_32/obj/delay/delay_s.rel
+/mnt/workspace/nRF24LE1_SDK-master/_target_sdcc_nrf24le1_32/obj/delay/delay_us.rel
+/mnt/workspace/nRF24LE1_SDK-master/_target_sdcc_nrf24le1_32/obj/gpio/gpio_pin_configure.rel
+/mnt/workspace/nRF24LE1_SDK-master/_target_sdcc_nrf24le1_32/obj/gpio/gpio_pin_dir_input.rel
+/mnt/workspace/nRF24LE1_SDK-master/_target_sdcc_nrf24le1_32/obj/gpio/gpio_pin_dir_output.rel
+/mnt/workspace/nRF24LE1_SDK-master/_target_sdcc_nrf24le1_32/obj/gpio/gpio_pin_val_clear.rel
+/mnt/workspace/nRF24LE1_SDK-master/_target_sdcc_nrf24le1_32/obj/gpio/gpio_pin_val_complement.rel
+/mnt/workspace/nRF24LE1_SDK-master/_target_sdcc_nrf24le1_32/obj/gpio/gpio_pin_val_read.rel
+/mnt/workspace/nRF24LE1_SDK-master/_target_sdcc_nrf24le1_32/obj/gpio/gpio_pin_val_set.rel
+/mnt/workspace/nRF24LE1_SDK-master/_target_sdcc_nrf24le1_32/obj/gpio/gpio_pin_val_write.rel
+/mnt/workspace/nRF24LE1_SDK-master/_target_sdcc_nrf24le1_32/obj/rf/rf_configure.rel
+/mnt/workspace/nRF24LE1_SDK-master/_target_sdcc_nrf24le1_32/obj/rf/rf_configure_debug.rel
+/mnt/workspace/nRF24LE1_SDK-master/_target_sdcc_nrf24le1_32/obj/rf/rf_configure_debug_lite.rel
+/mnt/workspace/nRF24LE1_SDK-master/_target_sdcc_nrf24le1_32/obj/rf/rf_get_all_registers.rel
+/mnt/workspace/nRF24LE1_SDK-master/_target_sdcc_nrf24le1_32/obj/rf/rf_irq_clear.rel
+/mnt/workspace/nRF24LE1_SDK-master/_target_sdcc_nrf24le1_32/obj/rf/rf_irq_clear_all.rel
+/mnt/workspace/nRF24LE1_SDK-master/_target_sdcc_nrf24le1_32/obj/rf/rf_is_rpd_active.rel
+/mnt/workspace/nRF24LE1_SDK-master/_target_sdcc_nrf24le1_32/obj/rf/rf_power_down.rel
+/mnt/workspace/nRF24LE1_SDK-master/_target_sdcc_nrf24le1_32/obj/rf/rf_power_down_param.rel
+/mnt/workspace/nRF24LE1_SDK-master/_target_sdcc_nrf24le1_32/obj/rf/rf_power_up.rel
+/mnt/workspace/nRF24LE1_SDK-master/_target_sdcc_nrf24le1_32/obj/rf/rf_power_up_param.rel
+/mnt/workspace/nRF24LE1_SDK-master/_target_sdcc_nrf24le1_32/obj/rf/rf_read_register.rel
+/mnt/workspace/nRF24LE1_SDK-master/_target_sdcc_nrf24le1_32/obj/rf/rf_read_register_1_byte.rel
+/mnt/workspace/nRF24LE1_SDK-master/_target_sdcc_nrf24le1_32/obj/rf/rf_read_rx_payload.rel
+/mnt/workspace/nRF24LE1_SDK-master/_target_sdcc_nrf24le1_32/obj/rf/rf_read_rx_payload_width.rel
+/mnt/workspace/nRF24LE1_SDK-master/_target_sdcc_nrf24le1_32/obj/rf/rf_rx_fifo_is_empty.rel
+/mnt/workspace/nRF24LE1_SDK-master/_target_sdcc_nrf24le1_32/obj/rf/rf_rx_fifo_is_full.rel
+/mnt/workspace/nRF24LE1_SDK-master/_target_sdcc_nrf24le1_32/obj/rf/rf_set_as_rx.rel
+/mnt/workspace/nRF24LE1_SDK-master/_target_sdcc_nrf24le1_32/obj/rf/rf_set_as_tx.rel
+/mnt/workspace/nRF24LE1_SDK-master/_target_sdcc_nrf24le1_32/obj/rf/rf_set_data_rate.rel
+/mnt/workspace/nRF24LE1_SDK-master/_target_sdcc_nrf24le1_32/obj/rf/rf_set_output_power.rel
+/mnt/workspace/nRF24LE1_SDK-master/_target_sdcc_nrf24le1_32/obj/rf/rf_set_rf_channel.rel
+/mnt/workspace/nRF24LE1_SDK-master/_target_sdcc_nrf24le1_32/obj/rf/rf_set_rx_addr.rel
+/mnt/workspace/nRF24LE1_SDK-master/_target_sdcc_nrf24le1_32/obj/rf/rf_set_tx_addr.rel
+/mnt/workspace/nRF24LE1_SDK-master/_target_sdcc_nrf24le1_32/obj/rf/rf_spi_configure_enable.rel
+/mnt/workspace/nRF24LE1_SDK-master/_target_sdcc_nrf24le1_32/obj/rf/rf_spi_execute_command.rel
+/mnt/workspace/nRF24LE1_SDK-master/_target_sdcc_nrf24le1_32/obj/rf/rf_spi_send_read.rel
+/mnt/workspace/nRF24LE1_SDK-master/_target_sdcc_nrf24le1_32/obj/rf/rf_spi_send_read_byte.rel
+/mnt/workspace/nRF24LE1_SDK-master/_target_sdcc_nrf24le1_32/obj/rf/rf_transmit.rel
+/mnt/workspace/nRF24LE1_SDK-master/_target_sdcc_nrf24le1_32/obj/rf/rf_tx_fifo_is_empty.rel
+/mnt/workspace/nRF24LE1_SDK-master/_target_sdcc_nrf24le1_32/obj/rf/rf_tx_fifo_is_full.rel
+/mnt/workspace/nRF24LE1_SDK-master/_target_sdcc_nrf24le1_32/obj/rf/rf_write_register.rel
+/mnt/workspace/nRF24LE1_SDK-master/_target_sdcc_nrf24le1_32/obj/rf/rf_write_tx_ack_payload.rel
+/mnt/workspace/nRF24LE1_SDK-master/_target_sdcc_nrf24le1_32/obj/rf/rf_write_tx_payload.rel
+/mnt/workspace/nRF24LE1_SDK-master/_target_sdcc_nrf24le1_32/obj/rf/rf_write_tx_payload_noack.rel
+/mnt/workspace/nRF24LE1_SDK-master/_target_sdcc_nrf24le1_32/obj/pwr_clk_mgmt/pwr_clk_mgmt_cclk_configure.rel
+/mnt/workspace/nRF24LE1_SDK-master/_target_sdcc_nrf24le1_32/obj/pwr_clk_mgmt/pwr_clk_mgmt_clklf_configure.rel
+/mnt/workspace/nRF24LE1_SDK-master/_target_sdcc_nrf24le1_32/obj/pwr_clk_mgmt/pwr_clk_mgmt_get_cclk_freq_in_hz.rel
+/mnt/workspace/nRF24LE1_SDK-master/_target_sdcc_nrf24le1_32/obj/pwr_clk_mgmt/pwr_clk_mgmt_get_cclk_freq_in_khz.rel
+/mnt/workspace/nRF24LE1_SDK-master/_target_sdcc_nrf24le1_32/obj/pwr_clk_mgmt/pwr_clk_mgmt_op_mode_configure.rel
+/mnt/workspace/nRF24LE1_SDK-master/_target_sdcc_nrf24le1_32/obj/pwr_clk_mgmt/pwr_clk_mgmt_pwr_failure_configure.rel
+/mnt/workspace/nRF24LE1_SDK-master/_target_sdcc_nrf24le1_32/obj/pwr_clk_mgmt/pwr_clk_mgmt_wakeup_pins_configure.rel
+/mnt/workspace/nRF24LE1_SDK-master/_target_sdcc_nrf24le1_32/obj/pwr_clk_mgmt/pwr_clk_mgmt_wakeup_sources_configure.rel
+/mnt/workspace/nRF24LE1_SDK-master/_target_sdcc_nrf24le1_32/obj/rng/rng_configure.rel
+/mnt/workspace/nRF24LE1_SDK-master/_target_sdcc_nrf24le1_32/obj/rng/rng_get_next_byte.rel
+/mnt/workspace/nRF24LE1_SDK-master/_target_sdcc_nrf24le1_32/obj/rng/rng_get_one_byte_and_turn_off.rel
+
+-e

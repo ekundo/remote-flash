@@ -1,0 +1,1950 @@
+                              1 ;--------------------------------------------------------
+                              2 ; File Created by SDCC : free open source ANSI-C Compiler
+                              3 ; Version 3.1.0 #7066 (Apr 25 2013) (Linux)
+                              4 ; This file was generated Sat Dec 12 12:42:36 2015
+                              5 ;--------------------------------------------------------
+                              6 	.module main
+                              7 	.optsdcc -mmcs51 --model-large
+                              8 	
+                              9 ;--------------------------------------------------------
+                             10 ; Public variables in this module
+                             11 ;--------------------------------------------------------
+                             12 	.globl _main
+                             13 	.globl _process_leader
+                             14 	.globl _process_body
+                             15 	.globl _process_end
+                             16 	.globl _read_period
+                             17 	.globl _process_validation
+                             18 	.globl _process_success
+                             19 	.globl _init_rf
+                             20 	.globl _send
+                             21 	.globl _process_response
+                             22 	.globl _rng_get_one_byte_and_turn_off
+                             23 	.globl _rf_spi_execute_command
+                             24 	.globl _rf_irq_clear_all
+                             25 	.globl _rf_spi_configure_enable
+                             26 	.globl _rf_write_tx_payload
+                             27 	.globl _rf_read_rx_payload
+                             28 	.globl _rf_set_as_tx
+                             29 	.globl _rf_set_as_rx
+                             30 	.globl _rf_configure
+                             31 	.globl _pwr_clk_mgmt_op_mode_configure
+                             32 	.globl _pwr_clk_mgmt_wakeup_pins_configure
+                             33 	.globl _pwr_clk_mgmt_clklf_configure
+                             34 	.globl _gpio_pin_val_read
+                             35 	.globl _gpio_pin_val_write
+                             36 	.globl _gpio_pin_val_set
+                             37 	.globl _gpio_pin_configure
+                             38 	.globl _delay_ms
+                             39 	.globl _delay_us
+                             40 	.globl _FSR_SB_ENDBG
+                             41 	.globl _FSR_SB_STP
+                             42 	.globl _FSR_SB_WEN
+                             43 	.globl _FSR_SB_RDYN
+                             44 	.globl _FSR_SB_INFEN
+                             45 	.globl _FSR_SB_RDISMB
+                             46 	.globl _RFCON_SB_RFCKEN
+                             47 	.globl _RFCON_SB_RFCSN
+                             48 	.globl _RFCON_SB_RFCE
+                             49 	.globl _ADCON_SB_BD
+                             50 	.globl _PSW_SB_P
+                             51 	.globl _PSW_SB_F1
+                             52 	.globl _PSW_SB_OV
+                             53 	.globl _PSW_SB_RS0
+                             54 	.globl _PSW_SB_RS1
+                             55 	.globl _PSW_SB_F0
+                             56 	.globl _PSW_SB_AC
+                             57 	.globl _PSW_SB_CY
+                             58 	.globl _T2CON_SB_T2PS
+                             59 	.globl _T2CON_SB_I3FR
+                             60 	.globl _T2CON_SB_I2FR
+                             61 	.globl _T2CON_SB_T2R1
+                             62 	.globl _T2CON_SB_T2R0
+                             63 	.globl _T2CON_SB_T2CM
+                             64 	.globl _T2CON_SB_T2I1
+                             65 	.globl _T2CON_SB_T2I0
+                             66 	.globl _IRCON_SB_EXF2
+                             67 	.globl _IRCON_SB_TF2
+                             68 	.globl _IRCON_SB_TICK
+                             69 	.globl _IRCON_SB_MISCIRQ
+                             70 	.globl _IRCON_SB_WUOPIRQ
+                             71 	.globl _IRCON_SB_SPI_2WIRE
+                             72 	.globl _IRCON_SB_RFIRQ
+                             73 	.globl _IRCON_SB_RFRDY
+                             74 	.globl _IEN1_SB_T2EXTRLD
+                             75 	.globl _IEN1_SB_TICK
+                             76 	.globl _IEN1_SB_MISCIRQ
+                             77 	.globl _IEN1_SB_WUOPIRQ
+                             78 	.globl _IEN1_SB_SPI_2WIRE
+                             79 	.globl _IEN1_SB_RFIRQ
+                             80 	.globl _IEN1_SB_RFRDY
+                             81 	.globl _P3_SB_D7
+                             82 	.globl _P3_SB_D6
+                             83 	.globl _P3_SB_D5
+                             84 	.globl _P3_SB_D4
+                             85 	.globl _P3_SB_D3
+                             86 	.globl _P3_SB_D2
+                             87 	.globl _P3_SB_D1
+                             88 	.globl _P3_SB_D0
+                             89 	.globl _IEN0_SB_GLOBAL
+                             90 	.globl _IEN0_SB_T2
+                             91 	.globl _IEN0_SB_UART
+                             92 	.globl _IEN0_SB_T1
+                             93 	.globl _IEN0_SB_POFIRQ
+                             94 	.globl _IEN0_SB_T0
+                             95 	.globl _IEN0_SB_IFP
+                             96 	.globl _P2_SB_D7
+                             97 	.globl _P2_SB_D6
+                             98 	.globl _P2_SB_D5
+                             99 	.globl _P2_SB_D4
+                            100 	.globl _P2_SB_D3
+                            101 	.globl _P2_SB_D2
+                            102 	.globl _P2_SB_D1
+                            103 	.globl _P2_SB_D0
+                            104 	.globl _S0CON_SB_SM0
+                            105 	.globl _S0CON_SB_SM1
+                            106 	.globl _S0CON_SB_SM20
+                            107 	.globl _S0CON_SB_REN0
+                            108 	.globl _S0CON_SB_TB80
+                            109 	.globl _S0CON_SB_RB80
+                            110 	.globl _S0CON_SB_TI0
+                            111 	.globl _S0CON_SB_RI0
+                            112 	.globl _P1_SB_D7
+                            113 	.globl _P1_SB_D6
+                            114 	.globl _P1_SB_D5
+                            115 	.globl _P1_SB_D4
+                            116 	.globl _P1_SB_D3
+                            117 	.globl _P1_SB_D2
+                            118 	.globl _P1_SB_D1
+                            119 	.globl _P1_SB_D0
+                            120 	.globl _TCON_SB_TF1
+                            121 	.globl _TCON_SB_TR1
+                            122 	.globl _TCON_SB_TF0
+                            123 	.globl _TCON_SB_TR0
+                            124 	.globl _TCON_SB_IE1
+                            125 	.globl _TCON_SB_IT1
+                            126 	.globl _TCON_SB_IE0
+                            127 	.globl _TCON_SB_IT0
+                            128 	.globl _P0_SB_D7
+                            129 	.globl _P0_SB_D6
+                            130 	.globl _P0_SB_D5
+                            131 	.globl _P0_SB_D4
+                            132 	.globl _P0_SB_D3
+                            133 	.globl _P0_SB_D2
+                            134 	.globl _P0_SB_D1
+                            135 	.globl _P0_SB_D0
+                            136 	.globl _ADCDAT
+                            137 	.globl _S0REL
+                            138 	.globl _T2
+                            139 	.globl _T1
+                            140 	.globl _T0
+                            141 	.globl _CRC
+                            142 	.globl _CC3
+                            143 	.globl _CC2
+                            144 	.globl _CC1
+                            145 	.globl _SPIMDAT
+                            146 	.globl _SPIMSTAT
+                            147 	.globl _SPIMCON1
+                            148 	.globl _SPIMCON0
+                            149 	.globl _FCR
+                            150 	.globl _FPCR
+                            151 	.globl _FSR
+                            152 	.globl _B
+                            153 	.globl _ARCON
+                            154 	.globl _MD5
+                            155 	.globl _MD4
+                            156 	.globl _MD3
+                            157 	.globl _MD2
+                            158 	.globl _MD1
+                            159 	.globl _MD0
+                            160 	.globl _RFCON
+                            161 	.globl _SPIRDAT
+                            162 	.globl _SPIRSTAT
+                            163 	.globl _SPIRCON1
+                            164 	.globl _SPIRCON0
+                            165 	.globl _W2CON0
+                            166 	.globl _W2CON1
+                            167 	.globl _ACC
+                            168 	.globl _CCPDATO
+                            169 	.globl _CCPDATIB
+                            170 	.globl _CCPDATIA
+                            171 	.globl _POFCON
+                            172 	.globl _COMPCON
+                            173 	.globl _W2DAT
+                            174 	.globl _W2SADR
+                            175 	.globl _ADCON
+                            176 	.globl _RNGDAT
+                            177 	.globl _RNGCTL
+                            178 	.globl _ADCDATL
+                            179 	.globl _ADCDATH
+                            180 	.globl _ADCCON1
+                            181 	.globl _ADCCON2
+                            182 	.globl _ADCCON3
+                            183 	.globl _PSW
+                            184 	.globl _WUOPC0
+                            185 	.globl _WUOPC1
+                            186 	.globl _TH2
+                            187 	.globl _TL2
+                            188 	.globl _CRCH
+                            189 	.globl _CRCL
+                            190 	.globl __XPAGE
+                            191 	.globl _MPAGE
+                            192 	.globl _T2CON
+                            193 	.globl _CCH3
+                            194 	.globl _CCL3
+                            195 	.globl _CCH2
+                            196 	.globl _CCL2
+                            197 	.globl _CCH1
+                            198 	.globl _CCL1
+                            199 	.globl _CCEN
+                            200 	.globl _IRCON
+                            201 	.globl _SPISDAT
+                            202 	.globl _SPISSTAT
+                            203 	.globl _SPISCON1
+                            204 	.globl _SPISCON0
+                            205 	.globl _S0RELH
+                            206 	.globl _IP1
+                            207 	.globl _IEN1
+                            208 	.globl _SPISRDSZ
+                            209 	.globl _RTC2CPT00
+                            210 	.globl _RTC2CMP1
+                            211 	.globl _RTC2CMP0
+                            212 	.globl _RTC2CON
+                            213 	.globl _PWMCON
+                            214 	.globl _RSTREAS
+                            215 	.globl _P3
+                            216 	.globl _WDSV
+                            217 	.globl _OPMCON
+                            218 	.globl _CLKLFCTRL
+                            219 	.globl _RTC2CPT10
+                            220 	.globl _RTC2CPT01
+                            221 	.globl _S0RELL
+                            222 	.globl _IP0
+                            223 	.globl _IEN0
+                            224 	.globl _MEMCON
+                            225 	.globl _INTEXP
+                            226 	.globl _WUCON
+                            227 	.globl _PWRDWN
+                            228 	.globl _CLKCTRL
+                            229 	.globl _PWMDC1
+                            230 	.globl _PWMDC0
+                            231 	.globl _P2
+                            232 	.globl _P1CON
+                            233 	.globl _P0CON
+                            234 	.globl _S0BUF
+                            235 	.globl _S0CON
+                            236 	.globl _P2CON
+                            237 	.globl _P3DIR
+                            238 	.globl _P2DIR
+                            239 	.globl _P1DIR
+                            240 	.globl _P0DIR
+                            241 	.globl _DPS
+                            242 	.globl _P1
+                            243 	.globl _P3CON
+                            244 	.globl _TH1
+                            245 	.globl _TH0
+                            246 	.globl _TL1
+                            247 	.globl _TL0
+                            248 	.globl _TMOD
+                            249 	.globl _TCON
+                            250 	.globl _PCON
+                            251 	.globl _DPH1
+                            252 	.globl _DPL1
+                            253 	.globl _DPH
+                            254 	.globl _DPL
+                            255 	.globl _SP
+                            256 	.globl _P0
+                            257 	.globl _send_PARM_2
+                            258 	.globl _process_response_PARM_2
+                            259 	.globl _body
+                            260 ;--------------------------------------------------------
+                            261 ; special function registers
+                            262 ;--------------------------------------------------------
+                            263 	.area RSEG    (ABS,DATA)
+   0000                     264 	.org 0x0000
+                    0080    265 _P0	=	0x0080
+                    0081    266 _SP	=	0x0081
+                    0082    267 _DPL	=	0x0082
+                    0083    268 _DPH	=	0x0083
+                    0084    269 _DPL1	=	0x0084
+                    0085    270 _DPH1	=	0x0085
+                    0087    271 _PCON	=	0x0087
+                    0088    272 _TCON	=	0x0088
+                    0089    273 _TMOD	=	0x0089
+                    008A    274 _TL0	=	0x008a
+                    008B    275 _TL1	=	0x008b
+                    008C    276 _TH0	=	0x008c
+                    008D    277 _TH1	=	0x008d
+                    008F    278 _P3CON	=	0x008f
+                    0090    279 _P1	=	0x0090
+                    0092    280 _DPS	=	0x0092
+                    0093    281 _P0DIR	=	0x0093
+                    0094    282 _P1DIR	=	0x0094
+                    0095    283 _P2DIR	=	0x0095
+                    0096    284 _P3DIR	=	0x0096
+                    0097    285 _P2CON	=	0x0097
+                    0098    286 _S0CON	=	0x0098
+                    0099    287 _S0BUF	=	0x0099
+                    009E    288 _P0CON	=	0x009e
+                    009F    289 _P1CON	=	0x009f
+                    00A0    290 _P2	=	0x00a0
+                    00A1    291 _PWMDC0	=	0x00a1
+                    00A2    292 _PWMDC1	=	0x00a2
+                    00A3    293 _CLKCTRL	=	0x00a3
+                    00A4    294 _PWRDWN	=	0x00a4
+                    00A5    295 _WUCON	=	0x00a5
+                    00A6    296 _INTEXP	=	0x00a6
+                    00A7    297 _MEMCON	=	0x00a7
+                    00A8    298 _IEN0	=	0x00a8
+                    00A9    299 _IP0	=	0x00a9
+                    00AA    300 _S0RELL	=	0x00aa
+                    00AB    301 _RTC2CPT01	=	0x00ab
+                    00AC    302 _RTC2CPT10	=	0x00ac
+                    00AD    303 _CLKLFCTRL	=	0x00ad
+                    00AE    304 _OPMCON	=	0x00ae
+                    00AF    305 _WDSV	=	0x00af
+                    00B0    306 _P3	=	0x00b0
+                    00B1    307 _RSTREAS	=	0x00b1
+                    00B2    308 _PWMCON	=	0x00b2
+                    00B3    309 _RTC2CON	=	0x00b3
+                    00B4    310 _RTC2CMP0	=	0x00b4
+                    00B5    311 _RTC2CMP1	=	0x00b5
+                    00B6    312 _RTC2CPT00	=	0x00b6
+                    00B7    313 _SPISRDSZ	=	0x00b7
+                    00B8    314 _IEN1	=	0x00b8
+                    00B9    315 _IP1	=	0x00b9
+                    00BA    316 _S0RELH	=	0x00ba
+                    00BC    317 _SPISCON0	=	0x00bc
+                    00BD    318 _SPISCON1	=	0x00bd
+                    00BE    319 _SPISSTAT	=	0x00be
+                    00BF    320 _SPISDAT	=	0x00bf
+                    00C0    321 _IRCON	=	0x00c0
+                    00C1    322 _CCEN	=	0x00c1
+                    00C2    323 _CCL1	=	0x00c2
+                    00C3    324 _CCH1	=	0x00c3
+                    00C4    325 _CCL2	=	0x00c4
+                    00C5    326 _CCH2	=	0x00c5
+                    00C6    327 _CCL3	=	0x00c6
+                    00C7    328 _CCH3	=	0x00c7
+                    00C8    329 _T2CON	=	0x00c8
+                    00C9    330 _MPAGE	=	0x00c9
+                    00C9    331 __XPAGE	=	0x00c9
+                    00CA    332 _CRCL	=	0x00ca
+                    00CB    333 _CRCH	=	0x00cb
+                    00CC    334 _TL2	=	0x00cc
+                    00CD    335 _TH2	=	0x00cd
+                    00CE    336 _WUOPC1	=	0x00ce
+                    00CF    337 _WUOPC0	=	0x00cf
+                    00D0    338 _PSW	=	0x00d0
+                    00D1    339 _ADCCON3	=	0x00d1
+                    00D2    340 _ADCCON2	=	0x00d2
+                    00D3    341 _ADCCON1	=	0x00d3
+                    00D4    342 _ADCDATH	=	0x00d4
+                    00D5    343 _ADCDATL	=	0x00d5
+                    00D6    344 _RNGCTL	=	0x00d6
+                    00D7    345 _RNGDAT	=	0x00d7
+                    00D8    346 _ADCON	=	0x00d8
+                    00D9    347 _W2SADR	=	0x00d9
+                    00DA    348 _W2DAT	=	0x00da
+                    00DB    349 _COMPCON	=	0x00db
+                    00DC    350 _POFCON	=	0x00dc
+                    00DD    351 _CCPDATIA	=	0x00dd
+                    00DE    352 _CCPDATIB	=	0x00de
+                    00DF    353 _CCPDATO	=	0x00df
+                    00E0    354 _ACC	=	0x00e0
+                    00E1    355 _W2CON1	=	0x00e1
+                    00E2    356 _W2CON0	=	0x00e2
+                    00E4    357 _SPIRCON0	=	0x00e4
+                    00E5    358 _SPIRCON1	=	0x00e5
+                    00E6    359 _SPIRSTAT	=	0x00e6
+                    00E7    360 _SPIRDAT	=	0x00e7
+                    00E8    361 _RFCON	=	0x00e8
+                    00E9    362 _MD0	=	0x00e9
+                    00EA    363 _MD1	=	0x00ea
+                    00EB    364 _MD2	=	0x00eb
+                    00EC    365 _MD3	=	0x00ec
+                    00ED    366 _MD4	=	0x00ed
+                    00EE    367 _MD5	=	0x00ee
+                    00EF    368 _ARCON	=	0x00ef
+                    00F0    369 _B	=	0x00f0
+                    00F8    370 _FSR	=	0x00f8
+                    00F9    371 _FPCR	=	0x00f9
+                    00FA    372 _FCR	=	0x00fa
+                    00FC    373 _SPIMCON0	=	0x00fc
+                    00FD    374 _SPIMCON1	=	0x00fd
+                    00FE    375 _SPIMSTAT	=	0x00fe
+                    00FF    376 _SPIMDAT	=	0x00ff
+                    C3C2    377 _CC1	=	0xc3c2
+                    C5C4    378 _CC2	=	0xc5c4
+                    C7C6    379 _CC3	=	0xc7c6
+                    CBCA    380 _CRC	=	0xcbca
+                    8C8A    381 _T0	=	0x8c8a
+                    8D8B    382 _T1	=	0x8d8b
+                    CDCC    383 _T2	=	0xcdcc
+                    BAAA    384 _S0REL	=	0xbaaa
+                    D4D5    385 _ADCDAT	=	0xd4d5
+                            386 ;--------------------------------------------------------
+                            387 ; special function bits
+                            388 ;--------------------------------------------------------
+                            389 	.area RSEG    (ABS,DATA)
+   0000                     390 	.org 0x0000
+                    0080    391 _P0_SB_D0	=	0x0080
+                    0081    392 _P0_SB_D1	=	0x0081
+                    0082    393 _P0_SB_D2	=	0x0082
+                    0083    394 _P0_SB_D3	=	0x0083
+                    0084    395 _P0_SB_D4	=	0x0084
+                    0085    396 _P0_SB_D5	=	0x0085
+                    0086    397 _P0_SB_D6	=	0x0086
+                    0087    398 _P0_SB_D7	=	0x0087
+                    0088    399 _TCON_SB_IT0	=	0x0088
+                    0089    400 _TCON_SB_IE0	=	0x0089
+                    008A    401 _TCON_SB_IT1	=	0x008a
+                    008B    402 _TCON_SB_IE1	=	0x008b
+                    008C    403 _TCON_SB_TR0	=	0x008c
+                    008D    404 _TCON_SB_TF0	=	0x008d
+                    008E    405 _TCON_SB_TR1	=	0x008e
+                    008F    406 _TCON_SB_TF1	=	0x008f
+                    0090    407 _P1_SB_D0	=	0x0090
+                    0091    408 _P1_SB_D1	=	0x0091
+                    0092    409 _P1_SB_D2	=	0x0092
+                    0093    410 _P1_SB_D3	=	0x0093
+                    0094    411 _P1_SB_D4	=	0x0094
+                    0095    412 _P1_SB_D5	=	0x0095
+                    0096    413 _P1_SB_D6	=	0x0096
+                    0097    414 _P1_SB_D7	=	0x0097
+                    0098    415 _S0CON_SB_RI0	=	0x0098
+                    0099    416 _S0CON_SB_TI0	=	0x0099
+                    009A    417 _S0CON_SB_RB80	=	0x009a
+                    009B    418 _S0CON_SB_TB80	=	0x009b
+                    009C    419 _S0CON_SB_REN0	=	0x009c
+                    009D    420 _S0CON_SB_SM20	=	0x009d
+                    009E    421 _S0CON_SB_SM1	=	0x009e
+                    009F    422 _S0CON_SB_SM0	=	0x009f
+                    00A0    423 _P2_SB_D0	=	0x00a0
+                    00A1    424 _P2_SB_D1	=	0x00a1
+                    00A2    425 _P2_SB_D2	=	0x00a2
+                    00A3    426 _P2_SB_D3	=	0x00a3
+                    00A4    427 _P2_SB_D4	=	0x00a4
+                    00A5    428 _P2_SB_D5	=	0x00a5
+                    00A6    429 _P2_SB_D6	=	0x00a6
+                    00A7    430 _P2_SB_D7	=	0x00a7
+                    00A8    431 _IEN0_SB_IFP	=	0x00a8
+                    00A9    432 _IEN0_SB_T0	=	0x00a9
+                    00AA    433 _IEN0_SB_POFIRQ	=	0x00aa
+                    00AB    434 _IEN0_SB_T1	=	0x00ab
+                    00AC    435 _IEN0_SB_UART	=	0x00ac
+                    00AD    436 _IEN0_SB_T2	=	0x00ad
+                    00AF    437 _IEN0_SB_GLOBAL	=	0x00af
+                    00B0    438 _P3_SB_D0	=	0x00b0
+                    00B1    439 _P3_SB_D1	=	0x00b1
+                    00B2    440 _P3_SB_D2	=	0x00b2
+                    00B3    441 _P3_SB_D3	=	0x00b3
+                    00B4    442 _P3_SB_D4	=	0x00b4
+                    00B5    443 _P3_SB_D5	=	0x00b5
+                    00B6    444 _P3_SB_D6	=	0x00b6
+                    00B7    445 _P3_SB_D7	=	0x00b7
+                    00B8    446 _IEN1_SB_RFRDY	=	0x00b8
+                    00B9    447 _IEN1_SB_RFIRQ	=	0x00b9
+                    00BA    448 _IEN1_SB_SPI_2WIRE	=	0x00ba
+                    00BB    449 _IEN1_SB_WUOPIRQ	=	0x00bb
+                    00BC    450 _IEN1_SB_MISCIRQ	=	0x00bc
+                    00BD    451 _IEN1_SB_TICK	=	0x00bd
+                    00BF    452 _IEN1_SB_T2EXTRLD	=	0x00bf
+                    00C0    453 _IRCON_SB_RFRDY	=	0x00c0
+                    00C1    454 _IRCON_SB_RFIRQ	=	0x00c1
+                    00C2    455 _IRCON_SB_SPI_2WIRE	=	0x00c2
+                    00C3    456 _IRCON_SB_WUOPIRQ	=	0x00c3
+                    00C4    457 _IRCON_SB_MISCIRQ	=	0x00c4
+                    00C5    458 _IRCON_SB_TICK	=	0x00c5
+                    00C6    459 _IRCON_SB_TF2	=	0x00c6
+                    00C7    460 _IRCON_SB_EXF2	=	0x00c7
+                    00C8    461 _T2CON_SB_T2I0	=	0x00c8
+                    00C9    462 _T2CON_SB_T2I1	=	0x00c9
+                    00CA    463 _T2CON_SB_T2CM	=	0x00ca
+                    00CB    464 _T2CON_SB_T2R0	=	0x00cb
+                    00CC    465 _T2CON_SB_T2R1	=	0x00cc
+                    00CD    466 _T2CON_SB_I2FR	=	0x00cd
+                    00CE    467 _T2CON_SB_I3FR	=	0x00ce
+                    00CF    468 _T2CON_SB_T2PS	=	0x00cf
+                    00D7    469 _PSW_SB_CY	=	0x00d7
+                    00D6    470 _PSW_SB_AC	=	0x00d6
+                    00D5    471 _PSW_SB_F0	=	0x00d5
+                    00D4    472 _PSW_SB_RS1	=	0x00d4
+                    00D3    473 _PSW_SB_RS0	=	0x00d3
+                    00D2    474 _PSW_SB_OV	=	0x00d2
+                    00D1    475 _PSW_SB_F1	=	0x00d1
+                    00D0    476 _PSW_SB_P	=	0x00d0
+                    00DF    477 _ADCON_SB_BD	=	0x00df
+                    00E8    478 _RFCON_SB_RFCE	=	0x00e8
+                    00E9    479 _RFCON_SB_RFCSN	=	0x00e9
+                    00EA    480 _RFCON_SB_RFCKEN	=	0x00ea
+                    00FA    481 _FSR_SB_RDISMB	=	0x00fa
+                    00FB    482 _FSR_SB_INFEN	=	0x00fb
+                    00FC    483 _FSR_SB_RDYN	=	0x00fc
+                    00FD    484 _FSR_SB_WEN	=	0x00fd
+                    00FE    485 _FSR_SB_STP	=	0x00fe
+                    00FF    486 _FSR_SB_ENDBG	=	0x00ff
+                            487 ;--------------------------------------------------------
+                            488 ; overlayable register banks
+                            489 ;--------------------------------------------------------
+                            490 	.area REG_BANK_0	(REL,OVR,DATA)
+   0000                     491 	.ds 8
+                            492 ;--------------------------------------------------------
+                            493 ; internal ram data
+                            494 ;--------------------------------------------------------
+                            495 	.area DSEG    (DATA)
+                            496 ;--------------------------------------------------------
+                            497 ; overlayable items in internal ram 
+                            498 ;--------------------------------------------------------
+                            499 	.area OSEG    (OVR,DATA)
+                            500 ;--------------------------------------------------------
+                            501 ; Stack segment in internal ram 
+                            502 ;--------------------------------------------------------
+                            503 	.area	SSEG	(DATA)
+   0000                     504 __start__stack:
+   0000                     505 	.ds	1
+                            506 
+                            507 ;--------------------------------------------------------
+                            508 ; indirectly addressable internal ram data
+                            509 ;--------------------------------------------------------
+                            510 	.area ISEG    (DATA)
+                            511 ;--------------------------------------------------------
+                            512 ; absolute internal ram data
+                            513 ;--------------------------------------------------------
+                            514 	.area IABS    (ABS,DATA)
+                            515 	.area IABS    (ABS,DATA)
+                            516 ;--------------------------------------------------------
+                            517 ; bit data
+                            518 ;--------------------------------------------------------
+                            519 	.area BSEG    (BIT)
+                            520 ;--------------------------------------------------------
+                            521 ; paged external ram data
+                            522 ;--------------------------------------------------------
+                            523 	.area PSEG    (PAG,XDATA)
+                            524 ;--------------------------------------------------------
+                            525 ; external ram data
+                            526 ;--------------------------------------------------------
+                            527 	.area XSEG    (XDATA)
+   0000                     528 _body::
+   0000                     529 	.ds 32
+   0020                     530 _process_response_PARM_2:
+   0020                     531 	.ds 1
+   0021                     532 _process_response_command_1_1:
+   0021                     533 	.ds 1
+   0022                     534 _send_PARM_2:
+   0022                     535 	.ds 1
+   0023                     536 _send_command_1_1:
+   0023                     537 	.ds 1
+   0024                     538 _send_payload_1_1:
+   0024                     539 	.ds 3
+   0027                     540 _init_rf_pipes_1_1:
+   0027                     541 	.ds 10
+   0031                     542 _process_success_customByte_1_1:
+   0031                     543 	.ds 1
+   0032                     544 _process_success_dataByte_1_1:
+   0032                     545 	.ds 1
+   0033                     546 _process_end_period_1_1:
+   0033                     547 	.ds 1
+   0034                     548 _process_end_highs_1_1:
+   0034                     549 	.ds 2
+   0036                     550 _process_body_highs_1_1:
+   0036                     551 	.ds 2
+   0038                     552 _process_body_lows_1_1:
+   0038                     553 	.ds 2
+   003A                     554 _process_body_period_2_2:
+   003A                     555 	.ds 1
+   003B                     556 _process_leader_period_1_1:
+   003B                     557 	.ds 1
+   003C                     558 _process_leader_lows_1_1:
+   003C                     559 	.ds 2
+   003E                     560 _process_leader_highs_1_1:
+   003E                     561 	.ds 2
+                            562 ;--------------------------------------------------------
+                            563 ; absolute external ram data
+                            564 ;--------------------------------------------------------
+                            565 	.area XABS    (ABS,XDATA)
+                            566 ;--------------------------------------------------------
+                            567 ; external initialized ram data
+                            568 ;--------------------------------------------------------
+                            569 	.area XISEG   (XDATA)
+                            570 	.area HOME    (CODE)
+                            571 	.area GSINIT0 (CODE)
+                            572 	.area GSINIT1 (CODE)
+                            573 	.area GSINIT2 (CODE)
+                            574 	.area GSINIT3 (CODE)
+                            575 	.area GSINIT4 (CODE)
+                            576 	.area GSINIT5 (CODE)
+                            577 	.area GSINIT  (CODE)
+                            578 	.area GSFINAL (CODE)
+                            579 	.area CSEG    (CODE)
+                            580 ;--------------------------------------------------------
+                            581 ; interrupt vector 
+                            582 ;--------------------------------------------------------
+                            583 	.area HOME    (CODE)
+   0000                     584 __interrupt_vect:
+   0000 02s00r00            585 	ljmp	__sdcc_gsinit_startup
+                            586 ;--------------------------------------------------------
+                            587 ; global & static initialisations
+                            588 ;--------------------------------------------------------
+                            589 	.area HOME    (CODE)
+                            590 	.area GSINIT  (CODE)
+                            591 	.area GSFINAL (CODE)
+                            592 	.area GSINIT  (CODE)
+                            593 	.globl __sdcc_gsinit_startup
+                            594 	.globl __sdcc_program_startup
+                            595 	.globl __start__stack
+                            596 	.globl __mcs51_genXINIT
+                            597 	.globl __mcs51_genXRAMCLEAR
+                            598 	.globl __mcs51_genRAMCLEAR
+                            599 	.area GSFINAL (CODE)
+   0000 02s00r03            600 	ljmp	__sdcc_program_startup
+                            601 ;--------------------------------------------------------
+                            602 ; Home
+                            603 ;--------------------------------------------------------
+                            604 	.area HOME    (CODE)
+                            605 	.area HOME    (CODE)
+   0003                     606 __sdcc_program_startup:
+   0003 12s06r82            607 	lcall	_main
+                            608 ;	return from main will lock up
+   0006 80 FE               609 	sjmp .
+                            610 ;--------------------------------------------------------
+                            611 ; code
+                            612 ;--------------------------------------------------------
+                            613 	.area CSEG    (CODE)
+                            614 ;------------------------------------------------------------
+                            615 ;Allocation info for local variables in function 'process_response'
+                            616 ;------------------------------------------------------------
+                            617 ;dataByte                  Allocated with name '_process_response_PARM_2'
+                            618 ;command                   Allocated with name '_process_response_command_1_1'
+                            619 ;delay                     Allocated with name '_process_response_delay_1_1'
+                            620 ;------------------------------------------------------------
+                            621 ;	main.c:44: void process_response(uint8_t command, uint8_t dataByte)
+                            622 ;	-----------------------------------------
+                            623 ;	 function process_response
+                            624 ;	-----------------------------------------
+   0000                     625 _process_response:
+                    0007    626 	ar7 = 0x07
+                    0006    627 	ar6 = 0x06
+                    0005    628 	ar5 = 0x05
+                    0004    629 	ar4 = 0x04
+                    0003    630 	ar3 = 0x03
+                    0002    631 	ar2 = 0x02
+                    0001    632 	ar1 = 0x01
+                    0000    633 	ar0 = 0x00
+   0000 E5 82               634 	mov	a,dpl
+                            635 ;	main.c:47: if (command == 2) {
+   0002 90s00r21            636 	mov	dptr,#_process_response_command_1_1
+   0005 F0                  637 	movx	@dptr,a
+   0006 FF                  638 	mov	r7,a
+   0007 BF 02 02            639 	cjne	r7,#0x02,00106$
+   000A 80 01               640 	sjmp	00107$
+   000C                     641 00106$:
+   000C 22                  642 	ret
+   000D                     643 00107$:
+                            644 ;	main.c:49: ((dataByte >> 3) & 1) * LED_TIME_0BIT +
+   000D 90s00r20            645 	mov	dptr,#_process_response_PARM_2
+   0010 E0                  646 	movx	a,@dptr
+   0011 FF                  647 	mov	r7,a
+   0012 A2 E3               648 	mov	c,acc[3]
+   0014 E4                  649 	clr	a
+   0015 33                  650 	rlc	a
+   0016 75 F0 14            651 	mov	b,#0x14
+   0019 A4                  652 	mul	ab
+   001A FE                  653 	mov	r6,a
+   001B AD F0               654 	mov	r5,b
+                            655 ;	main.c:50: ((dataByte >> 4) & 1) * LED_TIME_1BIT +
+   001D EF                  656 	mov	a,r7
+   001E C4                  657 	swap	a
+   001F 54 01               658 	anl	a,#0x01
+   0021 75 F0 32            659 	mov	b,#0x32
+   0024 A4                  660 	mul	ab
+   0025 2E                  661 	add	a,r6
+   0026 FE                  662 	mov	r6,a
+   0027 ED                  663 	mov	a,r5
+   0028 35 F0               664 	addc	a,b
+   002A FD                  665 	mov	r5,a
+                            666 ;	main.c:51: ((dataByte >> 5) & 1) * LED_TIME_2BIT +
+   002B EF                  667 	mov	a,r7
+   002C A2 E5               668 	mov	c,acc[5]
+   002E E4                  669 	clr	a
+   002F 33                  670 	rlc	a
+   0030 75 F0 64            671 	mov	b,#0x64
+   0033 A4                  672 	mul	ab
+   0034 2E                  673 	add	a,r6
+   0035 FE                  674 	mov	r6,a
+   0036 ED                  675 	mov	a,r5
+   0037 35 F0               676 	addc	a,b
+   0039 FD                  677 	mov	r5,a
+                            678 ;	main.c:52: ((dataByte >> 6) & 1) * LED_TIME_3BIT +
+   003A EF                  679 	mov	a,r7
+   003B 23                  680 	rl	a
+   003C 23                  681 	rl	a
+   003D 54 01               682 	anl	a,#0x01
+   003F 75 F0 FA            683 	mov	b,#0xFA
+   0042 A4                  684 	mul	ab
+   0043 2E                  685 	add	a,r6
+   0044 FE                  686 	mov	r6,a
+   0045 ED                  687 	mov	a,r5
+   0046 35 F0               688 	addc	a,b
+   0048 FD                  689 	mov	r5,a
+                            690 ;	main.c:53: ((dataByte >> 7) & 1) * LED_TIME_4BIT;
+   0049 EF                  691 	mov	a,r7
+   004A 23                  692 	rl	a
+   004B 54 01               693 	anl	a,#0x01
+   004D 90s00r00            694 	mov	dptr,#__mulint_PARM_2
+   0050 F0                  695 	movx	@dptr,a
+   0051 A3                  696 	inc	dptr
+   0052 E4                  697 	clr	a
+   0053 F0                  698 	movx	@dptr,a
+   0054 90 01 F4            699 	mov	dptr,#0x01F4
+   0057 C0 07               700 	push	ar7
+   0059 C0 06               701 	push	ar6
+   005B C0 05               702 	push	ar5
+   005D 12s00r00            703 	lcall	__mulint
+   0060 AB 82               704 	mov	r3,dpl
+   0062 AC 83               705 	mov	r4,dph
+   0064 D0 05               706 	pop	ar5
+   0066 D0 06               707 	pop	ar6
+   0068 D0 07               708 	pop	ar7
+   006A EB                  709 	mov	a,r3
+   006B 2E                  710 	add	a,r6
+   006C FE                  711 	mov	r6,a
+   006D EC                  712 	mov	a,r4
+   006E 3D                  713 	addc	a,r5
+   006F FD                  714 	mov	r5,a
+                            715 ;	main.c:54: gpio_pin_val_write(RED_PIN, ((~dataByte >> 0) & 1));
+   0070 7C 00               716 	mov	r4,#0x00
+   0072 EF                  717 	mov	a,r7
+   0073 F4                  718 	cpl	a
+   0074 FF                  719 	mov	r7,a
+   0075 EC                  720 	mov	a,r4
+   0076 F4                  721 	cpl	a
+   0077 FC                  722 	mov	r4,a
+   0078 90s00r00            723 	mov	dptr,#_gpio_pin_val_write_PARM_2
+   007B EF                  724 	mov	a,r7
+   007C 54 01               725 	anl	a,#0x01
+   007E F0                  726 	movx	@dptr,a
+   007F 75 82 0C            727 	mov	dpl,#0x0C
+   0082 C0 07               728 	push	ar7
+   0084 C0 06               729 	push	ar6
+   0086 C0 05               730 	push	ar5
+   0088 C0 04               731 	push	ar4
+   008A 12s00r00            732 	lcall	_gpio_pin_val_write
+   008D D0 04               733 	pop	ar4
+   008F D0 05               734 	pop	ar5
+   0091 D0 06               735 	pop	ar6
+   0093 D0 07               736 	pop	ar7
+                            737 ;	main.c:55: gpio_pin_val_write(GREEN_PIN, ((~dataByte >> 1) & 1));
+   0095 90s00r00            738 	mov	dptr,#_gpio_pin_val_write_PARM_2
+   0098 EF                  739 	mov	a,r7
+   0099 03                  740 	rr	a
+   009A 54 01               741 	anl	a,#0x01
+   009C F0                  742 	movx	@dptr,a
+   009D 75 82 0B            743 	mov	dpl,#0x0B
+   00A0 C0 07               744 	push	ar7
+   00A2 C0 06               745 	push	ar6
+   00A4 C0 05               746 	push	ar5
+   00A6 C0 04               747 	push	ar4
+   00A8 12s00r00            748 	lcall	_gpio_pin_val_write
+   00AB D0 04               749 	pop	ar4
+   00AD D0 05               750 	pop	ar5
+   00AF D0 06               751 	pop	ar6
+   00B1 D0 07               752 	pop	ar7
+                            753 ;	main.c:56: gpio_pin_val_write(BLUE_PIN, ((~dataByte >> 2) & 1));
+   00B3 90s00r00            754 	mov	dptr,#_gpio_pin_val_write_PARM_2
+   00B6 EF                  755 	mov	a,r7
+   00B7 03                  756 	rr	a
+   00B8 03                  757 	rr	a
+   00B9 54 01               758 	anl	a,#0x01
+   00BB F0                  759 	movx	@dptr,a
+   00BC 75 82 0A            760 	mov	dpl,#0x0A
+   00BF C0 06               761 	push	ar6
+   00C1 C0 05               762 	push	ar5
+   00C3 12s00r00            763 	lcall	_gpio_pin_val_write
+   00C6 D0 05               764 	pop	ar5
+   00C8 D0 06               765 	pop	ar6
+                            766 ;	main.c:57: delay_ms(delay);
+   00CA 8E 82               767 	mov	dpl,r6
+   00CC 8D 83               768 	mov	dph,r5
+   00CE 12s00r00            769 	lcall	_delay_ms
+                            770 ;	main.c:58: gpio_pin_val_set(RED_PIN);
+   00D1 75 82 0C            771 	mov	dpl,#0x0C
+   00D4 12s00r00            772 	lcall	_gpio_pin_val_set
+                            773 ;	main.c:59: gpio_pin_val_set(GREEN_PIN);
+   00D7 75 82 0B            774 	mov	dpl,#0x0B
+   00DA 12s00r00            775 	lcall	_gpio_pin_val_set
+                            776 ;	main.c:60: gpio_pin_val_set(BLUE_PIN);
+   00DD 75 82 0A            777 	mov	dpl,#0x0A
+   00E0 02s00r00            778 	ljmp	_gpio_pin_val_set
+                            779 ;------------------------------------------------------------
+                            780 ;Allocation info for local variables in function 'send'
+                            781 ;------------------------------------------------------------
+                            782 ;dataByte                  Allocated with name '_send_PARM_2'
+                            783 ;command                   Allocated with name '_send_command_1_1'
+                            784 ;count                     Allocated with name '_send_count_1_1'
+                            785 ;payload                   Allocated with name '_send_payload_1_1'
+                            786 ;------------------------------------------------------------
+                            787 ;	main.c:64: void send(uint8_t command, uint8_t dataByte)
+                            788 ;	-----------------------------------------
+                            789 ;	 function send
+                            790 ;	-----------------------------------------
+   00E3                     791 _send:
+   00E3 E5 82               792 	mov	a,dpl
+                            793 ;	main.c:67: uint8_t payload[3] = { command, dataByte, rng_get_one_byte_and_turn_off() };
+   00E5 90s00r23            794 	mov	dptr,#_send_command_1_1
+   00E8 F0                  795 	movx	@dptr,a
+   00E9 90s00r24            796 	mov	dptr,#_send_payload_1_1
+   00EC F0                  797 	movx	@dptr,a
+   00ED 90s00r22            798 	mov	dptr,#_send_PARM_2
+   00F0 E0                  799 	movx	a,@dptr
+   00F1 90s00r25            800 	mov	dptr,#(_send_payload_1_1 + 0x0001)
+   00F4 F0                  801 	movx	@dptr,a
+   00F5 12s00r00            802 	lcall	_rng_get_one_byte_and_turn_off
+   00F8 AF 82               803 	mov	r7,dpl
+   00FA 90s00r26            804 	mov	dptr,#(_send_payload_1_1 + 0x0002)
+   00FD EF                  805 	mov	a,r7
+   00FE F0                  806 	movx	@dptr,a
+                            807 ;	main.c:69: rf_write_tx_payload(&payload[0], 3, true);
+   00FF 90s00r00            808 	mov	dptr,#_rf_write_tx_payload_PARM_2
+   0102 74 03               809 	mov	a,#0x03
+   0104 F0                  810 	movx	@dptr,a
+   0105 A3                  811 	inc	dptr
+   0106 E4                  812 	clr	a
+   0107 F0                  813 	movx	@dptr,a
+   0108 90s00r00            814 	mov	dptr,#_rf_write_tx_payload_PARM_3
+   010B 74 01               815 	mov	a,#0x01
+   010D F0                  816 	movx	@dptr,a
+   010E 90s00r24            817 	mov	dptr,#_send_payload_1_1
+   0111 75 F0 00            818 	mov	b,#0x00
+   0114 12s00r00            819 	lcall	_rf_write_tx_payload
+                            820 ;	main.c:70: while(!rf_irq_tx_ds_active() && !rf_irq_max_rt_active());
+   0117                     821 00102$:
+   0117 90s00r00            822 	mov	dptr,#_rf_spi_execute_command_PARM_2
+   011A E4                  823 	clr	a
+   011B F0                  824 	movx	@dptr,a
+   011C A3                  825 	inc	dptr
+   011D F0                  826 	movx	@dptr,a
+   011E A3                  827 	inc	dptr
+   011F F0                  828 	movx	@dptr,a
+   0120 90s00r00            829 	mov	dptr,#_rf_spi_execute_command_PARM_3
+   0123 F0                  830 	movx	@dptr,a
+   0124 A3                  831 	inc	dptr
+   0125 E4                  832 	clr	a
+   0126 F0                  833 	movx	@dptr,a
+   0127 90s00r00            834 	mov	dptr,#_rf_spi_execute_command_PARM_4
+   012A 74 01               835 	mov	a,#0x01
+   012C F0                  836 	movx	@dptr,a
+   012D 75 82 FF            837 	mov	dpl,#0xFF
+   0130 12s00r00            838 	lcall	_rf_spi_execute_command
+   0133 E5 82               839 	mov	a,dpl
+   0135 20 E5 21            840 	jb	acc.5,00104$
+   0138 90s00r00            841 	mov	dptr,#_rf_spi_execute_command_PARM_2
+   013B E4                  842 	clr	a
+   013C F0                  843 	movx	@dptr,a
+   013D A3                  844 	inc	dptr
+   013E F0                  845 	movx	@dptr,a
+   013F A3                  846 	inc	dptr
+   0140 F0                  847 	movx	@dptr,a
+   0141 90s00r00            848 	mov	dptr,#_rf_spi_execute_command_PARM_3
+   0144 F0                  849 	movx	@dptr,a
+   0145 A3                  850 	inc	dptr
+   0146 E4                  851 	clr	a
+   0147 F0                  852 	movx	@dptr,a
+   0148 90s00r00            853 	mov	dptr,#_rf_spi_execute_command_PARM_4
+   014B 74 01               854 	mov	a,#0x01
+   014D F0                  855 	movx	@dptr,a
+   014E 75 82 FF            856 	mov	dpl,#0xFF
+   0151 12s00r00            857 	lcall	_rf_spi_execute_command
+   0154 E5 82               858 	mov	a,dpl
+   0156 30 E4 BE            859 	jnb	acc.4,00102$
+   0159                     860 00104$:
+                            861 ;	main.c:71: if (rf_irq_tx_ds_active())
+   0159 90s00r00            862 	mov	dptr,#_rf_spi_execute_command_PARM_2
+   015C E4                  863 	clr	a
+   015D F0                  864 	movx	@dptr,a
+   015E A3                  865 	inc	dptr
+   015F F0                  866 	movx	@dptr,a
+   0160 A3                  867 	inc	dptr
+   0161 F0                  868 	movx	@dptr,a
+   0162 90s00r00            869 	mov	dptr,#_rf_spi_execute_command_PARM_3
+   0165 F0                  870 	movx	@dptr,a
+   0166 A3                  871 	inc	dptr
+   0167 E4                  872 	clr	a
+   0168 F0                  873 	movx	@dptr,a
+   0169 90s00r00            874 	mov	dptr,#_rf_spi_execute_command_PARM_4
+   016C 74 01               875 	mov	a,#0x01
+   016E F0                  876 	movx	@dptr,a
+   016F 75 82 FF            877 	mov	dpl,#0xFF
+   0172 12s00r00            878 	lcall	_rf_spi_execute_command
+   0175 E5 82               879 	mov	a,dpl
+   0177 20 E5 03            880 	jb	acc.5,00129$
+   017A 02s02r65            881 	ljmp	00108$
+   017D                     882 00129$:
+                            883 ;	main.c:73: rf_flush_rx();
+   017D 90s00r00            884 	mov	dptr,#_rf_spi_execute_command_PARM_2
+   0180 E4                  885 	clr	a
+   0181 F0                  886 	movx	@dptr,a
+   0182 A3                  887 	inc	dptr
+   0183 F0                  888 	movx	@dptr,a
+   0184 A3                  889 	inc	dptr
+   0185 F0                  890 	movx	@dptr,a
+   0186 90s00r00            891 	mov	dptr,#_rf_spi_execute_command_PARM_3
+   0189 F0                  892 	movx	@dptr,a
+   018A A3                  893 	inc	dptr
+   018B E4                  894 	clr	a
+   018C F0                  895 	movx	@dptr,a
+   018D 90s00r00            896 	mov	dptr,#_rf_spi_execute_command_PARM_4
+   0190 74 01               897 	mov	a,#0x01
+   0192 F0                  898 	movx	@dptr,a
+   0193 75 82 E2            899 	mov	dpl,#0xE2
+   0196 12s00r00            900 	lcall	_rf_spi_execute_command
+                            901 ;	main.c:74: rf_flush_tx();
+   0199 90s00r00            902 	mov	dptr,#_rf_spi_execute_command_PARM_2
+   019C E4                  903 	clr	a
+   019D F0                  904 	movx	@dptr,a
+   019E A3                  905 	inc	dptr
+   019F F0                  906 	movx	@dptr,a
+   01A0 A3                  907 	inc	dptr
+   01A1 F0                  908 	movx	@dptr,a
+   01A2 90s00r00            909 	mov	dptr,#_rf_spi_execute_command_PARM_3
+   01A5 F0                  910 	movx	@dptr,a
+   01A6 A3                  911 	inc	dptr
+   01A7 E4                  912 	clr	a
+   01A8 F0                  913 	movx	@dptr,a
+   01A9 90s00r00            914 	mov	dptr,#_rf_spi_execute_command_PARM_4
+   01AC 74 01               915 	mov	a,#0x01
+   01AE F0                  916 	movx	@dptr,a
+   01AF 75 82 E1            917 	mov	dpl,#0xE1
+   01B2 12s00r00            918 	lcall	_rf_spi_execute_command
+                            919 ;	main.c:75: rf_irq_clear_all();
+   01B5 12s00r00            920 	lcall	_rf_irq_clear_all
+                            921 ;	main.c:76: rf_set_as_rx(true);
+   01B8 75 82 01            922 	mov	dpl,#0x01
+   01BB 12s00r00            923 	lcall	_rf_set_as_rx
+                            924 ;	main.c:77: for(count = 0; count < RESPONSE_TIMEOUT_US && !rf_irq_rx_dr_active(); count++)
+   01BE 7C 00               925 	mov	r4,#0x00
+   01C0 7D 00               926 	mov	r5,#0x00
+   01C2 7E 00               927 	mov	r6,#0x00
+   01C4 7F 00               928 	mov	r7,#0x00
+   01C6                     929 00110$:
+   01C6 C3                  930 	clr	c
+   01C7 EC                  931 	mov	a,r4
+   01C8 94 88               932 	subb	a,#0x88
+   01CA ED                  933 	mov	a,r5
+   01CB 94 13               934 	subb	a,#0x13
+   01CD EE                  935 	mov	a,r6
+   01CE 94 00               936 	subb	a,#0x00
+   01D0 EF                  937 	mov	a,r7
+   01D1 94 00               938 	subb	a,#0x00
+   01D3 50 4B               939 	jnc	00113$
+   01D5 90s00r00            940 	mov	dptr,#_rf_spi_execute_command_PARM_2
+   01D8 E4                  941 	clr	a
+   01D9 F0                  942 	movx	@dptr,a
+   01DA A3                  943 	inc	dptr
+   01DB F0                  944 	movx	@dptr,a
+   01DC A3                  945 	inc	dptr
+   01DD F0                  946 	movx	@dptr,a
+   01DE 90s00r00            947 	mov	dptr,#_rf_spi_execute_command_PARM_3
+   01E1 F0                  948 	movx	@dptr,a
+   01E2 A3                  949 	inc	dptr
+   01E3 E4                  950 	clr	a
+   01E4 F0                  951 	movx	@dptr,a
+   01E5 90s00r00            952 	mov	dptr,#_rf_spi_execute_command_PARM_4
+   01E8 74 01               953 	mov	a,#0x01
+   01EA F0                  954 	movx	@dptr,a
+   01EB 75 82 FF            955 	mov	dpl,#0xFF
+   01EE C0 07               956 	push	ar7
+   01F0 C0 06               957 	push	ar6
+   01F2 C0 05               958 	push	ar5
+   01F4 C0 04               959 	push	ar4
+   01F6 12s00r00            960 	lcall	_rf_spi_execute_command
+   01F9 E5 82               961 	mov	a,dpl
+   01FB D0 04               962 	pop	ar4
+   01FD D0 05               963 	pop	ar5
+   01FF D0 06               964 	pop	ar6
+   0201 D0 07               965 	pop	ar7
+   0203 30 E6 04            966 	jnb	acc.6,00116$
+   0206 7B 01               967 	mov	r3,#0x01
+   0208 80 02               968 	sjmp	00117$
+   020A                     969 00116$:
+   020A 7B 00               970 	mov	r3,#0x00
+   020C                     971 00117$:
+   020C EB                  972 	mov	a,r3
+   020D 70 11               973 	jnz	00113$
+                            974 ;	main.c:79: nop();
+   020F 00                  975 	 nop 
+                            976 ;	main.c:80: nop();
+   0210 00                  977 	 nop 
+                            978 ;	main.c:77: for(count = 0; count < RESPONSE_TIMEOUT_US && !rf_irq_rx_dr_active(); count++)
+   0211 0C                  979 	inc	r4
+   0212 BC 00 09            980 	cjne	r4,#0x00,00133$
+   0215 0D                  981 	inc	r5
+   0216 BD 00 05            982 	cjne	r5,#0x00,00133$
+   0219 0E                  983 	inc	r6
+   021A BE 00 A9            984 	cjne	r6,#0x00,00110$
+   021D 0F                  985 	inc	r7
+   021E                     986 00133$:
+   021E 80 A6               987 	sjmp	00110$
+   0220                     988 00113$:
+                            989 ;	main.c:82: if (rf_irq_rx_dr_active())
+   0220 90s00r00            990 	mov	dptr,#_rf_spi_execute_command_PARM_2
+   0223 E4                  991 	clr	a
+   0224 F0                  992 	movx	@dptr,a
+   0225 A3                  993 	inc	dptr
+   0226 F0                  994 	movx	@dptr,a
+   0227 A3                  995 	inc	dptr
+   0228 F0                  996 	movx	@dptr,a
+   0229 90s00r00            997 	mov	dptr,#_rf_spi_execute_command_PARM_3
+   022C F0                  998 	movx	@dptr,a
+   022D A3                  999 	inc	dptr
+   022E E4                 1000 	clr	a
+   022F F0                 1001 	movx	@dptr,a
+   0230 90s00r00           1002 	mov	dptr,#_rf_spi_execute_command_PARM_4
+   0233 74 01              1003 	mov	a,#0x01
+   0235 F0                 1004 	movx	@dptr,a
+   0236 75 82 FF           1005 	mov	dpl,#0xFF
+   0239 12s00r00           1006 	lcall	_rf_spi_execute_command
+   023C E5 82              1007 	mov	a,dpl
+   023E 30 E6 24           1008 	jnb	acc.6,00108$
+                           1009 ;	main.c:84: rf_read_rx_payload(&payload[0], 3);
+   0241 90s00r00           1010 	mov	dptr,#_rf_read_rx_payload_PARM_2
+   0244 74 03              1011 	mov	a,#0x03
+   0246 F0                 1012 	movx	@dptr,a
+   0247 A3                 1013 	inc	dptr
+   0248 E4                 1014 	clr	a
+   0249 F0                 1015 	movx	@dptr,a
+   024A 90s00r24           1016 	mov	dptr,#_send_payload_1_1
+   024D 75 F0 00           1017 	mov	b,#0x00
+   0250 12s00r00           1018 	lcall	_rf_read_rx_payload
+                           1019 ;	main.c:85: process_response(payload[0], payload[1]);
+   0253 90s00r24           1020 	mov	dptr,#_send_payload_1_1
+   0256 E0                 1021 	movx	a,@dptr
+   0257 FF                 1022 	mov	r7,a
+   0258 90s00r25           1023 	mov	dptr,#(_send_payload_1_1 + 0x0001)
+   025B E0                 1024 	movx	a,@dptr
+   025C 90s00r20           1025 	mov	dptr,#_process_response_PARM_2
+   025F F0                 1026 	movx	@dptr,a
+   0260 8F 82              1027 	mov	dpl,r7
+   0262 12s00r00           1028 	lcall	_process_response
+   0265                    1029 00108$:
+                           1030 ;	main.c:88: rf_flush_rx();
+   0265 90s00r00           1031 	mov	dptr,#_rf_spi_execute_command_PARM_2
+   0268 E4                 1032 	clr	a
+   0269 F0                 1033 	movx	@dptr,a
+   026A A3                 1034 	inc	dptr
+   026B F0                 1035 	movx	@dptr,a
+   026C A3                 1036 	inc	dptr
+   026D F0                 1037 	movx	@dptr,a
+   026E 90s00r00           1038 	mov	dptr,#_rf_spi_execute_command_PARM_3
+   0271 F0                 1039 	movx	@dptr,a
+   0272 A3                 1040 	inc	dptr
+   0273 E4                 1041 	clr	a
+   0274 F0                 1042 	movx	@dptr,a
+   0275 90s00r00           1043 	mov	dptr,#_rf_spi_execute_command_PARM_4
+   0278 74 01              1044 	mov	a,#0x01
+   027A F0                 1045 	movx	@dptr,a
+   027B 75 82 E2           1046 	mov	dpl,#0xE2
+   027E 12s00r00           1047 	lcall	_rf_spi_execute_command
+                           1048 ;	main.c:89: rf_flush_tx();
+   0281 90s00r00           1049 	mov	dptr,#_rf_spi_execute_command_PARM_2
+   0284 E4                 1050 	clr	a
+   0285 F0                 1051 	movx	@dptr,a
+   0286 A3                 1052 	inc	dptr
+   0287 F0                 1053 	movx	@dptr,a
+   0288 A3                 1054 	inc	dptr
+   0289 F0                 1055 	movx	@dptr,a
+   028A 90s00r00           1056 	mov	dptr,#_rf_spi_execute_command_PARM_3
+   028D F0                 1057 	movx	@dptr,a
+   028E A3                 1058 	inc	dptr
+   028F E4                 1059 	clr	a
+   0290 F0                 1060 	movx	@dptr,a
+   0291 90s00r00           1061 	mov	dptr,#_rf_spi_execute_command_PARM_4
+   0294 74 01              1062 	mov	a,#0x01
+   0296 F0                 1063 	movx	@dptr,a
+   0297 75 82 E1           1064 	mov	dpl,#0xE1
+   029A 12s00r00           1065 	lcall	_rf_spi_execute_command
+                           1066 ;	main.c:90: rf_irq_clear_all();
+   029D 12s00r00           1067 	lcall	_rf_irq_clear_all
+                           1068 ;	main.c:91: rf_set_as_tx();
+   02A0 02s00r00           1069 	ljmp	_rf_set_as_tx
+                           1070 ;------------------------------------------------------------
+                           1071 ;Allocation info for local variables in function 'init_rf'
+                           1072 ;------------------------------------------------------------
+                           1073 ;pipes                     Allocated with name '_init_rf_pipes_1_1'
+                           1074 ;------------------------------------------------------------
+                           1075 ;	main.c:94: void init_rf()
+                           1076 ;	-----------------------------------------
+                           1077 ;	 function init_rf
+                           1078 ;	-----------------------------------------
+   02A3                    1079 _init_rf:
+                           1080 ;	main.c:96: uint8_t pipes[2][5] = {  
+   02A3 90s00r27           1081 	mov	dptr,#_init_rf_pipes_1_1
+   02A6 74 B8              1082 	mov	a,#0xB8
+   02A8 F0                 1083 	movx	@dptr,a
+   02A9 90s00r28           1084 	mov	dptr,#(_init_rf_pipes_1_1 + 0x0001)
+   02AC 74 25              1085 	mov	a,#0x25
+   02AE F0                 1086 	movx	@dptr,a
+   02AF 90s00r29           1087 	mov	dptr,#(_init_rf_pipes_1_1 + 0x0002)
+   02B2 74 B9              1088 	mov	a,#0xB9
+   02B4 F0                 1089 	movx	@dptr,a
+   02B5 90s00r2A           1090 	mov	dptr,#(_init_rf_pipes_1_1 + 0x0003)
+   02B8 74 E1              1091 	mov	a,#0xE1
+   02BA F0                 1092 	movx	@dptr,a
+   02BB 90s00r2B           1093 	mov	dptr,#(_init_rf_pipes_1_1 + 0x0004)
+   02BE 74 BD              1094 	mov	a,#0xBD
+   02C0 F0                 1095 	movx	@dptr,a
+   02C1 90s00r2C           1096 	mov	dptr,#(_init_rf_pipes_1_1 + 0x0005)
+   02C4 74 D9              1097 	mov	a,#0xD9
+   02C6 F0                 1098 	movx	@dptr,a
+   02C7 90s00r2D           1099 	mov	dptr,#(_init_rf_pipes_1_1 + 0x0006)
+   02CA 74 02              1100 	mov	a,#0x02
+   02CC F0                 1101 	movx	@dptr,a
+   02CD 90s00r2E           1102 	mov	dptr,#(_init_rf_pipes_1_1 + 0x0007)
+   02D0 74 86              1103 	mov	a,#0x86
+   02D2 F0                 1104 	movx	@dptr,a
+   02D3 90s00r2F           1105 	mov	dptr,#(_init_rf_pipes_1_1 + 0x0008)
+   02D6 74 D0              1106 	mov	a,#0xD0
+   02D8 F0                 1107 	movx	@dptr,a
+   02D9 90s00r30           1108 	mov	dptr,#(_init_rf_pipes_1_1 + 0x0009)
+   02DC 74 EE              1109 	mov	a,#0xEE
+   02DE F0                 1110 	movx	@dptr,a
+                           1111 ;	main.c:101: rf_spi_configure_enable();
+   02DF 12s00r00           1112 	lcall	_rf_spi_configure_enable
+                           1113 ;	main.c:112: &pipes[1][0],
+                           1114 ;	main.c:113: &pipes[0][0],
+                           1115 ;	main.c:118: &pipes[1][0],
+                           1116 ;	main.c:126: 0x00);
+   02E2 90s00r00           1117 	mov	dptr,#_rf_configure_PARM_2
+   02E5 E4                 1118 	clr	a
+   02E6 F0                 1119 	movx	@dptr,a
+   02E7 90s00r00           1120 	mov	dptr,#_rf_configure_PARM_3
+   02EA 74 03              1121 	mov	a,#0x03
+   02EC F0                 1122 	movx	@dptr,a
+   02ED 90s00r00           1123 	mov	dptr,#_rf_configure_PARM_4
+   02F0 74 03              1124 	mov	a,#0x03
+   02F2 F0                 1125 	movx	@dptr,a
+   02F3 90s00r00           1126 	mov	dptr,#_rf_configure_PARM_5
+   02F6 74 03              1127 	mov	a,#0x03
+   02F8 F0                 1128 	movx	@dptr,a
+   02F9 90s00r00           1129 	mov	dptr,#_rf_configure_PARM_6
+   02FC 74 1F              1130 	mov	a,#0x1F
+   02FE F0                 1131 	movx	@dptr,a
+   02FF 90s00r00           1132 	mov	dptr,#_rf_configure_PARM_7
+   0302 74 60              1133 	mov	a,#0x60
+   0304 F0                 1134 	movx	@dptr,a
+   0305 90s00r00           1135 	mov	dptr,#_rf_configure_PARM_8
+   0308 74 26              1136 	mov	a,#0x26
+   030A F0                 1137 	movx	@dptr,a
+   030B 90s00r00           1138 	mov	dptr,#_rf_configure_PARM_9
+   030E 74r2C              1139 	mov	a,#(_init_rf_pipes_1_1 + 0x0005)
+   0310 F0                 1140 	movx	@dptr,a
+   0311 A3                 1141 	inc	dptr
+   0312 74s00              1142 	mov	a,#((_init_rf_pipes_1_1 + 0x0005) >> 8)
+   0314 F0                 1143 	movx	@dptr,a
+   0315 A3                 1144 	inc	dptr
+   0316 E4                 1145 	clr	a
+   0317 F0                 1146 	movx	@dptr,a
+   0318 90s00r00           1147 	mov	dptr,#_rf_configure_PARM_10
+   031B 74r27              1148 	mov	a,#_init_rf_pipes_1_1
+   031D F0                 1149 	movx	@dptr,a
+   031E A3                 1150 	inc	dptr
+   031F 74s00              1151 	mov	a,#(_init_rf_pipes_1_1 >> 8)
+   0321 F0                 1152 	movx	@dptr,a
+   0322 A3                 1153 	inc	dptr
+   0323 E4                 1154 	clr	a
+   0324 F0                 1155 	movx	@dptr,a
+   0325 90s00r00           1156 	mov	dptr,#_rf_configure_PARM_11
+   0328 74 C3              1157 	mov	a,#0xC3
+   032A F0                 1158 	movx	@dptr,a
+   032B 90s00r00           1159 	mov	dptr,#_rf_configure_PARM_12
+   032E 74 C4              1160 	mov	a,#0xC4
+   0330 F0                 1161 	movx	@dptr,a
+   0331 90s00r00           1162 	mov	dptr,#_rf_configure_PARM_13
+   0334 74 C5              1163 	mov	a,#0xC5
+   0336 F0                 1164 	movx	@dptr,a
+   0337 90s00r00           1165 	mov	dptr,#_rf_configure_PARM_14
+   033A 74 C6              1166 	mov	a,#0xC6
+   033C F0                 1167 	movx	@dptr,a
+   033D 90s00r00           1168 	mov	dptr,#_rf_configure_PARM_15
+   0340 74r2C              1169 	mov	a,#(_init_rf_pipes_1_1 + 0x0005)
+   0342 F0                 1170 	movx	@dptr,a
+   0343 A3                 1171 	inc	dptr
+   0344 74s00              1172 	mov	a,#((_init_rf_pipes_1_1 + 0x0005) >> 8)
+   0346 F0                 1173 	movx	@dptr,a
+   0347 A3                 1174 	inc	dptr
+   0348 E4                 1175 	clr	a
+   0349 F0                 1176 	movx	@dptr,a
+   034A 90s00r00           1177 	mov	dptr,#_rf_configure_PARM_16
+   034D 74 03              1178 	mov	a,#0x03
+   034F F0                 1179 	movx	@dptr,a
+   0350 90s00r00           1180 	mov	dptr,#_rf_configure_PARM_17
+   0353 74 03              1181 	mov	a,#0x03
+   0355 F0                 1182 	movx	@dptr,a
+   0356 90s00r00           1183 	mov	dptr,#_rf_configure_PARM_18
+   0359 E4                 1184 	clr	a
+   035A F0                 1185 	movx	@dptr,a
+   035B 90s00r00           1186 	mov	dptr,#_rf_configure_PARM_19
+   035E F0                 1187 	movx	@dptr,a
+   035F 90s00r00           1188 	mov	dptr,#_rf_configure_PARM_20
+   0362 F0                 1189 	movx	@dptr,a
+   0363 90s00r00           1190 	mov	dptr,#_rf_configure_PARM_21
+   0366 F0                 1191 	movx	@dptr,a
+   0367 90s00r00           1192 	mov	dptr,#_rf_configure_PARM_22
+   036A E4                 1193 	clr	a
+   036B F0                 1194 	movx	@dptr,a
+   036C 90s00r00           1195 	mov	dptr,#_rf_configure_PARM_23
+   036F F0                 1196 	movx	@dptr,a
+   0370 75 82 0E           1197 	mov	dpl,#0x0E
+   0373 02s00r00           1198 	ljmp	_rf_configure
+                           1199 ;------------------------------------------------------------
+                           1200 ;Allocation info for local variables in function 'process_success'
+                           1201 ;------------------------------------------------------------
+                           1202 ;customByte                Allocated with name '_process_success_customByte_1_1'
+                           1203 ;dataByte                  Allocated with name '_process_success_dataByte_1_1'
+                           1204 ;bitNum                    Allocated with name '_process_success_bitNum_1_1'
+                           1205 ;------------------------------------------------------------
+                           1206 ;	main.c:129: void process_success()
+                           1207 ;	-----------------------------------------
+                           1208 ;	 function process_success
+                           1209 ;	-----------------------------------------
+   0376                    1210 _process_success:
+                           1211 ;	main.c:131: uint8_t customByte = 0;
+   0376 90s00r31           1212 	mov	dptr,#_process_success_customByte_1_1
+                           1213 ;	main.c:132: uint8_t dataByte = 0;
+   0379 E4                 1214 	clr	a
+   037A F0                 1215 	movx	@dptr,a
+   037B 90s00r32           1216 	mov	dptr,#_process_success_dataByte_1_1
+   037E F0                 1217 	movx	@dptr,a
+                           1218 ;	main.c:135: for (bitNum = 0; bitNum < BODY_CUSTOM_BITS; bitNum++)
+   037F 7F 00              1219 	mov	r7,#0x00
+   0381                    1220 00103$:
+   0381 BF 08 00           1221 	cjne	r7,#0x08,00120$
+   0384                    1222 00120$:
+   0384 50 27              1223 	jnc	00106$
+                           1224 ;	main.c:137: customByte += body[bitNum] << bitNum;
+   0386 EF                 1225 	mov	a,r7
+   0387 24r00              1226 	add	a,#_body
+   0389 F5 82              1227 	mov	dpl,a
+   038B E4                 1228 	clr	a
+   038C 34s00              1229 	addc	a,#(_body >> 8)
+   038E F5 83              1230 	mov	dph,a
+   0390 E0                 1231 	movx	a,@dptr
+   0391 FE                 1232 	mov	r6,a
+   0392 8F F0              1233 	mov	b,r7
+   0394 05 F0              1234 	inc	b
+   0396 EE                 1235 	mov	a,r6
+   0397 80 02              1236 	sjmp	00124$
+   0399                    1237 00122$:
+   0399 25 E0              1238 	add	a,acc
+   039B                    1239 00124$:
+   039B D5 F0 FB           1240 	djnz	b,00122$
+   039E FE                 1241 	mov	r6,a
+   039F 90s00r31           1242 	mov	dptr,#_process_success_customByte_1_1
+   03A2 E0                 1243 	movx	a,@dptr
+   03A3 FD                 1244 	mov	r5,a
+   03A4 90s00r31           1245 	mov	dptr,#_process_success_customByte_1_1
+   03A7 EE                 1246 	mov	a,r6
+   03A8 2D                 1247 	add	a,r5
+   03A9 F0                 1248 	movx	@dptr,a
+                           1249 ;	main.c:135: for (bitNum = 0; bitNum < BODY_CUSTOM_BITS; bitNum++)
+   03AA 0F                 1250 	inc	r7
+   03AB 80 D4              1251 	sjmp	00103$
+   03AD                    1252 00106$:
+                           1253 ;	main.c:139: for (bitNum = 0; bitNum < BODY_DATA_BITS; bitNum++)
+   03AD 7F 00              1254 	mov	r7,#0x00
+   03AF                    1255 00107$:
+   03AF BF 08 00           1256 	cjne	r7,#0x08,00125$
+   03B2                    1257 00125$:
+   03B2 50 29              1258 	jnc	00110$
+                           1259 ;	main.c:141: dataByte += body[BODY_CUSTOM_BITS * 2 + bitNum] << bitNum;
+   03B4 74 10              1260 	mov	a,#0x10
+   03B6 2F                 1261 	add	a,r7
+   03B7 24r00              1262 	add	a,#_body
+   03B9 F5 82              1263 	mov	dpl,a
+   03BB E4                 1264 	clr	a
+   03BC 34s00              1265 	addc	a,#(_body >> 8)
+   03BE F5 83              1266 	mov	dph,a
+   03C0 E0                 1267 	movx	a,@dptr
+   03C1 FE                 1268 	mov	r6,a
+   03C2 8F F0              1269 	mov	b,r7
+   03C4 05 F0              1270 	inc	b
+   03C6 EE                 1271 	mov	a,r6
+   03C7 80 02              1272 	sjmp	00129$
+   03C9                    1273 00127$:
+   03C9 25 E0              1274 	add	a,acc
+   03CB                    1275 00129$:
+   03CB D5 F0 FB           1276 	djnz	b,00127$
+   03CE FE                 1277 	mov	r6,a
+   03CF 90s00r32           1278 	mov	dptr,#_process_success_dataByte_1_1
+   03D2 E0                 1279 	movx	a,@dptr
+   03D3 FD                 1280 	mov	r5,a
+   03D4 90s00r32           1281 	mov	dptr,#_process_success_dataByte_1_1
+   03D7 EE                 1282 	mov	a,r6
+   03D8 2D                 1283 	add	a,r5
+   03D9 F0                 1284 	movx	@dptr,a
+                           1285 ;	main.c:139: for (bitNum = 0; bitNum < BODY_DATA_BITS; bitNum++)
+   03DA 0F                 1286 	inc	r7
+   03DB 80 D2              1287 	sjmp	00107$
+   03DD                    1288 00110$:
+                           1289 ;	main.c:144: if (customByte != 7) {
+   03DD 90s00r31           1290 	mov	dptr,#_process_success_customByte_1_1
+   03E0 E0                 1291 	movx	a,@dptr
+   03E1 FF                 1292 	mov	r7,a
+                           1293 ;	main.c:145: return;
+   03E2 BF 07 11           1294 	cjne	r7,#0x07,00111$
+                           1295 ;	main.c:148: init_rf();
+   03E5 12s02rA3           1296 	lcall	_init_rf
+                           1297 ;	main.c:149: send(1, dataByte);
+   03E8 90s00r32           1298 	mov	dptr,#_process_success_dataByte_1_1
+   03EB E0                 1299 	movx	a,@dptr
+   03EC 90s00r22           1300 	mov	dptr,#_send_PARM_2
+   03EF F0                 1301 	movx	@dptr,a
+   03F0 75 82 01           1302 	mov	dpl,#0x01
+   03F3 02s00rE3           1303 	ljmp	_send
+   03F6                    1304 00111$:
+   03F6 22                 1305 	ret
+                           1306 ;------------------------------------------------------------
+                           1307 ;Allocation info for local variables in function 'process_validation'
+                           1308 ;------------------------------------------------------------
+                           1309 ;bitNum                    Allocated with name '_process_validation_bitNum_1_1'
+                           1310 ;------------------------------------------------------------
+                           1311 ;	main.c:152: void process_validation()
+                           1312 ;	-----------------------------------------
+                           1313 ;	 function process_validation
+                           1314 ;	-----------------------------------------
+   03F7                    1315 _process_validation:
+                           1316 ;	main.c:155: for (bitNum = 0; bitNum < BODY_CUSTOM_BITS; bitNum++)
+   03F7 7F 00              1317 	mov	r7,#0x00
+   03F9                    1318 00105$:
+   03F9 BF 08 00           1319 	cjne	r7,#0x08,00121$
+   03FC                    1320 00121$:
+   03FC 50 21              1321 	jnc	00120$
+                           1322 ;	main.c:157: if (body[bitNum] != body[BODY_CUSTOM_BITS + bitNum]) {
+   03FE EF                 1323 	mov	a,r7
+   03FF 24r00              1324 	add	a,#_body
+   0401 F5 82              1325 	mov	dpl,a
+   0403 E4                 1326 	clr	a
+   0404 34s00              1327 	addc	a,#(_body >> 8)
+   0406 F5 83              1328 	mov	dph,a
+   0408 E0                 1329 	movx	a,@dptr
+   0409 FE                 1330 	mov	r6,a
+   040A 74 08              1331 	mov	a,#0x08
+   040C 2F                 1332 	add	a,r7
+   040D 24r00              1333 	add	a,#_body
+   040F F5 82              1334 	mov	dpl,a
+   0411 E4                 1335 	clr	a
+   0412 34s00              1336 	addc	a,#(_body >> 8)
+   0414 F5 83              1337 	mov	dph,a
+   0416 E0                 1338 	movx	a,@dptr
+   0417 FD                 1339 	mov	r5,a
+   0418 EE                 1340 	mov	a,r6
+                           1341 ;	main.c:158: return;
+   0419 B5 05 31           1342 	cjne	a,ar5,00113$
+                           1343 ;	main.c:155: for (bitNum = 0; bitNum < BODY_CUSTOM_BITS; bitNum++)
+   041C 0F                 1344 	inc	r7
+                           1345 ;	main.c:161: for (bitNum = 0; bitNum < BODY_DATA_BITS; bitNum++)
+   041D 80 DA              1346 	sjmp	00105$
+   041F                    1347 00120$:
+   041F 7F 00              1348 	mov	r7,#0x00
+   0421                    1349 00109$:
+   0421 BF 08 00           1350 	cjne	r7,#0x08,00124$
+   0424                    1351 00124$:
+   0424 50 24              1352 	jnc	00112$
+                           1353 ;	main.c:163: if (body[BODY_CUSTOM_BITS * 2 + bitNum] ==
+   0426 74 10              1354 	mov	a,#0x10
+   0428 2F                 1355 	add	a,r7
+   0429 24r00              1356 	add	a,#_body
+   042B F5 82              1357 	mov	dpl,a
+   042D E4                 1358 	clr	a
+   042E 34s00              1359 	addc	a,#(_body >> 8)
+   0430 F5 83              1360 	mov	dph,a
+   0432 E0                 1361 	movx	a,@dptr
+   0433 FE                 1362 	mov	r6,a
+                           1363 ;	main.c:164: body[BODY_CUSTOM_BITS * 2 + BODY_DATA_BITS + bitNum]) {
+   0434 74 18              1364 	mov	a,#0x18
+   0436 2F                 1365 	add	a,r7
+   0437 24r00              1366 	add	a,#_body
+   0439 F5 82              1367 	mov	dpl,a
+   043B E4                 1368 	clr	a
+   043C 34s00              1369 	addc	a,#(_body >> 8)
+   043E F5 83              1370 	mov	dph,a
+   0440 E0                 1371 	movx	a,@dptr
+   0441 FD                 1372 	mov	r5,a
+   0442 EE                 1373 	mov	a,r6
+   0443 B5 05 01           1374 	cjne	a,ar5,00111$
+                           1375 ;	main.c:165: return;
+   0446 22                 1376 	ret
+   0447                    1377 00111$:
+                           1378 ;	main.c:161: for (bitNum = 0; bitNum < BODY_DATA_BITS; bitNum++)
+   0447 0F                 1379 	inc	r7
+   0448 80 D7              1380 	sjmp	00109$
+   044A                    1381 00112$:
+                           1382 ;	main.c:169: process_success();
+   044A 02s03r76           1383 	ljmp	_process_success
+   044D                    1384 00113$:
+   044D 22                 1385 	ret
+                           1386 ;------------------------------------------------------------
+                           1387 ;Allocation info for local variables in function 'read_period'
+                           1388 ;------------------------------------------------------------
+                           1389 ;sample                    Allocated with name '_read_period_sample_1_1'
+                           1390 ;------------------------------------------------------------
+                           1391 ;	main.c:172: bool read_period()
+                           1392 ;	-----------------------------------------
+                           1393 ;	 function read_period
+                           1394 ;	-----------------------------------------
+   044E                    1395 _read_period:
+                           1396 ;	main.c:175: sample = !gpio_pin_val_read(IN_PIN);
+   044E 75 82 06           1397 	mov	dpl,#0x06
+   0451 12s00r00           1398 	lcall	_gpio_pin_val_read
+   0454 E5 82              1399 	mov	a,dpl
+   0456 FF                 1400 	mov	r7,a
+   0457 B4 01 00           1401 	cjne	a,#0x01,00103$
+   045A                    1402 00103$:
+   045A E4                 1403 	clr	a
+   045B 33                 1404 	rlc	a
+   045C FF                 1405 	mov	r7,a
+                           1406 ;	main.c:176: delay_us(40);
+   045D 90 00 28           1407 	mov	dptr,#0x0028
+   0460 C0 07              1408 	push	ar7
+   0462 12s00r00           1409 	lcall	_delay_us
+   0465 D0 07              1410 	pop	ar7
+                           1411 ;	main.c:177: return sample;
+   0467 8F 82              1412 	mov	dpl,r7
+   0469 22                 1413 	ret
+                           1414 ;------------------------------------------------------------
+                           1415 ;Allocation info for local variables in function 'process_end'
+                           1416 ;------------------------------------------------------------
+                           1417 ;period                    Allocated with name '_process_end_period_1_1'
+                           1418 ;highs                     Allocated with name '_process_end_highs_1_1'
+                           1419 ;------------------------------------------------------------
+                           1420 ;	main.c:180: void process_end()
+                           1421 ;	-----------------------------------------
+                           1422 ;	 function process_end
+                           1423 ;	-----------------------------------------
+   046A                    1424 _process_end:
+                           1425 ;	main.c:182: bool period = true;
+   046A 90s00r33           1426 	mov	dptr,#_process_end_period_1_1
+   046D 74 01              1427 	mov	a,#0x01
+   046F F0                 1428 	movx	@dptr,a
+                           1429 ;	main.c:183: uint16_t highs = 0;
+   0470 90s00r34           1430 	mov	dptr,#_process_end_highs_1_1
+   0473 E4                 1431 	clr	a
+   0474 F0                 1432 	movx	@dptr,a
+   0475 A3                 1433 	inc	dptr
+   0476 F0                 1434 	movx	@dptr,a
+                           1435 ;	main.c:184: while (period && highs <= MAX_BIT_HIGHS) {
+   0477                    1436 00102$:
+   0477 90s00r33           1437 	mov	dptr,#_process_end_period_1_1
+   047A E0                 1438 	movx	a,@dptr
+   047B FF                 1439 	mov	r7,a
+   047C 60 30              1440 	jz	00104$
+   047E 90s00r34           1441 	mov	dptr,#_process_end_highs_1_1
+   0481 E0                 1442 	movx	a,@dptr
+   0482 FE                 1443 	mov	r6,a
+   0483 A3                 1444 	inc	dptr
+   0484 E0                 1445 	movx	a,@dptr
+   0485 FF                 1446 	mov	r7,a
+   0486 C3                 1447 	clr	c
+   0487 74 0C              1448 	mov	a,#0x0C
+   0489 9E                 1449 	subb	a,r6
+   048A E4                 1450 	clr	a
+   048B 9F                 1451 	subb	a,r7
+   048C 40 20              1452 	jc	00104$
+                           1453 ;	main.c:185: period = read_period();
+   048E C0 07              1454 	push	ar7
+   0490 C0 06              1455 	push	ar6
+   0492 12s04r4E           1456 	lcall	_read_period
+   0495 AD 82              1457 	mov	r5,dpl
+   0497 D0 06              1458 	pop	ar6
+   0499 D0 07              1459 	pop	ar7
+   049B 90s00r33           1460 	mov	dptr,#_process_end_period_1_1
+   049E ED                 1461 	mov	a,r5
+   049F F0                 1462 	movx	@dptr,a
+                           1463 ;	main.c:186: highs += period;
+   04A0 7C 00              1464 	mov	r4,#0x00
+   04A2 90s00r34           1465 	mov	dptr,#_process_end_highs_1_1
+   04A5 ED                 1466 	mov	a,r5
+   04A6 2E                 1467 	add	a,r6
+   04A7 F0                 1468 	movx	@dptr,a
+   04A8 EC                 1469 	mov	a,r4
+   04A9 3F                 1470 	addc	a,r7
+   04AA A3                 1471 	inc	dptr
+   04AB F0                 1472 	movx	@dptr,a
+   04AC 80 C9              1473 	sjmp	00102$
+   04AE                    1474 00104$:
+                           1475 ;	main.c:188: if (highs > MAX_BIT_HIGHS || highs < MIN_BIT_HIGHS)
+   04AE 90s00r34           1476 	mov	dptr,#_process_end_highs_1_1
+   04B1 E0                 1477 	movx	a,@dptr
+   04B2 FE                 1478 	mov	r6,a
+   04B3 A3                 1479 	inc	dptr
+   04B4 E0                 1480 	movx	a,@dptr
+   04B5 FF                 1481 	mov	r7,a
+   04B6 C3                 1482 	clr	c
+   04B7 74 0C              1483 	mov	a,#0x0C
+   04B9 9E                 1484 	subb	a,r6
+   04BA E4                 1485 	clr	a
+   04BB 9F                 1486 	subb	a,r7
+   04BC 40 08              1487 	jc	00105$
+   04BE EE                 1488 	mov	a,r6
+   04BF 94 08              1489 	subb	a,#0x08
+   04C1 EF                 1490 	mov	a,r7
+   04C2 94 00              1491 	subb	a,#0x00
+   04C4 50 01              1492 	jnc	00106$
+   04C6                    1493 00105$:
+                           1494 ;	main.c:190: return;
+   04C6 22                 1495 	ret
+   04C7                    1496 00106$:
+                           1497 ;	main.c:193: process_validation();
+   04C7 02s03rF7           1498 	ljmp	_process_validation
+                           1499 ;------------------------------------------------------------
+                           1500 ;Allocation info for local variables in function 'process_body'
+                           1501 ;------------------------------------------------------------
+                           1502 ;bitNum                    Allocated with name '_process_body_bitNum_1_1'
+                           1503 ;highs                     Allocated with name '_process_body_highs_1_1'
+                           1504 ;lows                      Allocated with name '_process_body_lows_1_1'
+                           1505 ;period                    Allocated with name '_process_body_period_2_2'
+                           1506 ;------------------------------------------------------------
+                           1507 ;	main.c:196: void process_body()
+                           1508 ;	-----------------------------------------
+                           1509 ;	 function process_body
+                           1510 ;	-----------------------------------------
+   04CA                    1511 _process_body:
+                           1512 ;	main.c:201: for (bitNum = 0; bitNum < BODY_BITS; bitNum++)
+   04CA 7F 00              1513 	mov	r7,#0x00
+   04CC                    1514 00117$:
+   04CC BF 20 00           1515 	cjne	r7,#0x20,00134$
+   04CF                    1516 00134$:
+   04CF 40 03              1517 	jc	00135$
+   04D1 02s05rC1           1518 	ljmp	00120$
+   04D4                    1519 00135$:
+                           1520 ;	main.c:203: bool period = true;
+   04D4 90s00r3A           1521 	mov	dptr,#_process_body_period_2_2
+   04D7 74 01              1522 	mov	a,#0x01
+   04D9 F0                 1523 	movx	@dptr,a
+                           1524 ;	main.c:204: highs = 0;
+   04DA 90s00r36           1525 	mov	dptr,#_process_body_highs_1_1
+   04DD E4                 1526 	clr	a
+   04DE F0                 1527 	movx	@dptr,a
+   04DF A3                 1528 	inc	dptr
+   04E0 F0                 1529 	movx	@dptr,a
+                           1530 ;	main.c:205: while (period && highs <= MAX_BIT_HIGHS) {
+   04E1                    1531 00102$:
+   04E1 90s00r3A           1532 	mov	dptr,#_process_body_period_2_2
+   04E4 E0                 1533 	movx	a,@dptr
+   04E5 FE                 1534 	mov	r6,a
+   04E6 60 34              1535 	jz	00104$
+   04E8 90s00r36           1536 	mov	dptr,#_process_body_highs_1_1
+   04EB E0                 1537 	movx	a,@dptr
+   04EC FD                 1538 	mov	r5,a
+   04ED A3                 1539 	inc	dptr
+   04EE E0                 1540 	movx	a,@dptr
+   04EF FE                 1541 	mov	r6,a
+   04F0 C3                 1542 	clr	c
+   04F1 74 0C              1543 	mov	a,#0x0C
+   04F3 9D                 1544 	subb	a,r5
+   04F4 E4                 1545 	clr	a
+   04F5 9E                 1546 	subb	a,r6
+   04F6 40 24              1547 	jc	00104$
+                           1548 ;	main.c:206: period = read_period();
+   04F8 C0 07              1549 	push	ar7
+   04FA C0 06              1550 	push	ar6
+   04FC C0 05              1551 	push	ar5
+   04FE 12s04r4E           1552 	lcall	_read_period
+   0501 AC 82              1553 	mov	r4,dpl
+   0503 D0 05              1554 	pop	ar5
+   0505 D0 06              1555 	pop	ar6
+   0507 D0 07              1556 	pop	ar7
+   0509 90s00r3A           1557 	mov	dptr,#_process_body_period_2_2
+   050C EC                 1558 	mov	a,r4
+   050D F0                 1559 	movx	@dptr,a
+                           1560 ;	main.c:207: highs += period;
+   050E 7B 00              1561 	mov	r3,#0x00
+   0510 90s00r36           1562 	mov	dptr,#_process_body_highs_1_1
+   0513 EC                 1563 	mov	a,r4
+   0514 2D                 1564 	add	a,r5
+   0515 F0                 1565 	movx	@dptr,a
+   0516 EB                 1566 	mov	a,r3
+   0517 3E                 1567 	addc	a,r6
+   0518 A3                 1568 	inc	dptr
+   0519 F0                 1569 	movx	@dptr,a
+   051A 80 C5              1570 	sjmp	00102$
+   051C                    1571 00104$:
+                           1572 ;	main.c:210: if (highs > MAX_BIT_HIGHS || highs < MIN_BIT_HIGHS)
+   051C 90s00r36           1573 	mov	dptr,#_process_body_highs_1_1
+   051F E0                 1574 	movx	a,@dptr
+   0520 FD                 1575 	mov	r5,a
+   0521 A3                 1576 	inc	dptr
+   0522 E0                 1577 	movx	a,@dptr
+   0523 FE                 1578 	mov	r6,a
+   0524 C3                 1579 	clr	c
+   0525 74 0C              1580 	mov	a,#0x0C
+   0527 9D                 1581 	subb	a,r5
+   0528 E4                 1582 	clr	a
+   0529 9E                 1583 	subb	a,r6
+   052A 40 08              1584 	jc	00105$
+   052C ED                 1585 	mov	a,r5
+   052D 94 08              1586 	subb	a,#0x08
+   052F EE                 1587 	mov	a,r6
+   0530 94 00              1588 	subb	a,#0x00
+   0532 50 01              1589 	jnc	00106$
+   0534                    1590 00105$:
+                           1591 ;	main.c:212: return;
+   0534 22                 1592 	ret
+   0535                    1593 00106$:
+                           1594 ;	main.c:215: lows = 0;
+   0535 90s00r38           1595 	mov	dptr,#_process_body_lows_1_1
+   0538 E4                 1596 	clr	a
+   0539 F0                 1597 	movx	@dptr,a
+   053A A3                 1598 	inc	dptr
+   053B F0                 1599 	movx	@dptr,a
+                           1600 ;	main.c:216: while (!period && lows <= MAX_DATA1_BIT_LOWS) {
+   053C                    1601 00109$:
+   053C 90s00r3A           1602 	mov	dptr,#_process_body_period_2_2
+   053F E0                 1603 	movx	a,@dptr
+   0540 FE                 1604 	mov	r6,a
+   0541 70 3B              1605 	jnz	00111$
+   0543 90s00r38           1606 	mov	dptr,#_process_body_lows_1_1
+   0546 E0                 1607 	movx	a,@dptr
+   0547 FD                 1608 	mov	r5,a
+   0548 A3                 1609 	inc	dptr
+   0549 E0                 1610 	movx	a,@dptr
+   054A FE                 1611 	mov	r6,a
+   054B C3                 1612 	clr	c
+   054C 74 21              1613 	mov	a,#0x21
+   054E 9D                 1614 	subb	a,r5
+   054F E4                 1615 	clr	a
+   0550 9E                 1616 	subb	a,r6
+   0551 40 2B              1617 	jc	00111$
+                           1618 ;	main.c:217: period = read_period();
+   0553 C0 07              1619 	push	ar7
+   0555 C0 06              1620 	push	ar6
+   0557 C0 05              1621 	push	ar5
+   0559 12s04r4E           1622 	lcall	_read_period
+   055C AC 82              1623 	mov	r4,dpl
+   055E D0 05              1624 	pop	ar5
+   0560 D0 06              1625 	pop	ar6
+   0562 D0 07              1626 	pop	ar7
+   0564 90s00r3A           1627 	mov	dptr,#_process_body_period_2_2
+   0567 EC                 1628 	mov	a,r4
+   0568 F0                 1629 	movx	@dptr,a
+                           1630 ;	main.c:218: lows += !period;
+   0569 EC                 1631 	mov	a,r4
+   056A B4 01 00           1632 	cjne	a,#0x01,00142$
+   056D                    1633 00142$:
+   056D E4                 1634 	clr	a
+   056E 33                 1635 	rlc	a
+   056F FC                 1636 	mov	r4,a
+   0570 7B 00              1637 	mov	r3,#0x00
+   0572 90s00r38           1638 	mov	dptr,#_process_body_lows_1_1
+   0575 EC                 1639 	mov	a,r4
+   0576 2D                 1640 	add	a,r5
+   0577 F0                 1641 	movx	@dptr,a
+   0578 EB                 1642 	mov	a,r3
+   0579 3E                 1643 	addc	a,r6
+   057A A3                 1644 	inc	dptr
+   057B F0                 1645 	movx	@dptr,a
+   057C 80 BE              1646 	sjmp	00109$
+   057E                    1647 00111$:
+                           1648 ;	main.c:221: if (lows > MAX_DATA1_BIT_LOWS ||
+   057E 90s00r38           1649 	mov	dptr,#_process_body_lows_1_1
+   0581 E0                 1650 	movx	a,@dptr
+   0582 FD                 1651 	mov	r5,a
+   0583 A3                 1652 	inc	dptr
+   0584 E0                 1653 	movx	a,@dptr
+   0585 FE                 1654 	mov	r6,a
+   0586 C3                 1655 	clr	c
+   0587 74 21              1656 	mov	a,#0x21
+   0589 9D                 1657 	subb	a,r5
+   058A E4                 1658 	clr	a
+   058B 9E                 1659 	subb	a,r6
+                           1660 ;	main.c:222: (lows < MIN_DATA1_BIT_LOWS && lows > MAX_DATA0_BIT_LOWS) ||
+   058C 40 1C              1661 	jc	00112$
+   058E ED                 1662 	mov	a,r5
+   058F 94 16              1663 	subb	a,#0x16
+   0591 EE                 1664 	mov	a,r6
+   0592 94 00              1665 	subb	a,#0x00
+   0594 E4                 1666 	clr	a
+   0595 33                 1667 	rlc	a
+   0596 FC                 1668 	mov	r4,a
+   0597 60 08              1669 	jz	00116$
+   0599 C3                 1670 	clr	c
+   059A 74 09              1671 	mov	a,#0x09
+   059C 9D                 1672 	subb	a,r5
+   059D E4                 1673 	clr	a
+   059E 9E                 1674 	subb	a,r6
+   059F 40 09              1675 	jc	00112$
+   05A1                    1676 00116$:
+                           1677 ;	main.c:223: lows < MIN_DATA0_BIT_LOWS)
+   05A1 C3                 1678 	clr	c
+   05A2 ED                 1679 	mov	a,r5
+   05A3 94 06              1680 	subb	a,#0x06
+   05A5 EE                 1681 	mov	a,r6
+   05A6 94 00              1682 	subb	a,#0x00
+   05A8 50 01              1683 	jnc	00113$
+   05AA                    1684 00112$:
+                           1685 ;	main.c:225: return;
+   05AA 22                 1686 	ret
+   05AB                    1687 00113$:
+                           1688 ;	main.c:228: body[bitNum] = lows >= MIN_DATA1_BIT_LOWS;
+   05AB EF                 1689 	mov	a,r7
+   05AC 24r00              1690 	add	a,#_body
+   05AE F5 82              1691 	mov	dpl,a
+   05B0 E4                 1692 	clr	a
+   05B1 34s00              1693 	addc	a,#(_body >> 8)
+   05B3 F5 83              1694 	mov	dph,a
+   05B5 EC                 1695 	mov	a,r4
+   05B6 B4 01 00           1696 	cjne	a,#0x01,00147$
+   05B9                    1697 00147$:
+   05B9 E4                 1698 	clr	a
+   05BA 33                 1699 	rlc	a
+   05BB FC                 1700 	mov	r4,a
+   05BC F0                 1701 	movx	@dptr,a
+                           1702 ;	main.c:201: for (bitNum = 0; bitNum < BODY_BITS; bitNum++)
+   05BD 0F                 1703 	inc	r7
+   05BE 02s04rCC           1704 	ljmp	00117$
+   05C1                    1705 00120$:
+                           1706 ;	main.c:230: process_end();
+   05C1 02s04r6A           1707 	ljmp	_process_end
+                           1708 ;------------------------------------------------------------
+                           1709 ;Allocation info for local variables in function 'process_leader'
+                           1710 ;------------------------------------------------------------
+                           1711 ;period                    Allocated with name '_process_leader_period_1_1'
+                           1712 ;lows                      Allocated with name '_process_leader_lows_1_1'
+                           1713 ;highs                     Allocated with name '_process_leader_highs_1_1'
+                           1714 ;------------------------------------------------------------
+                           1715 ;	main.c:233: void process_leader()
+                           1716 ;	-----------------------------------------
+                           1717 ;	 function process_leader
+                           1718 ;	-----------------------------------------
+   05C4                    1719 _process_leader:
+                           1720 ;	main.c:235: bool period = true;
+   05C4 90s00r3B           1721 	mov	dptr,#_process_leader_period_1_1
+   05C7 74 01              1722 	mov	a,#0x01
+   05C9 F0                 1723 	movx	@dptr,a
+                           1724 ;	main.c:236: uint16_t lows = 0;
+   05CA 90s00r3C           1725 	mov	dptr,#_process_leader_lows_1_1
+                           1726 ;	main.c:237: uint16_t highs = 0;
+   05CD E4                 1727 	clr	a
+   05CE F0                 1728 	movx	@dptr,a
+   05CF A3                 1729 	inc	dptr
+   05D0 F0                 1730 	movx	@dptr,a
+   05D1 90s00r3E           1731 	mov	dptr,#_process_leader_highs_1_1
+   05D4 F0                 1732 	movx	@dptr,a
+   05D5 A3                 1733 	inc	dptr
+   05D6 E4                 1734 	clr	a
+   05D7 F0                 1735 	movx	@dptr,a
+                           1736 ;	main.c:239: while (period && highs <= MAX_LEADER_HIGHS)
+   05D8                    1737 00102$:
+   05D8 90s00r3B           1738 	mov	dptr,#_process_leader_period_1_1
+   05DB E0                 1739 	movx	a,@dptr
+   05DC FF                 1740 	mov	r7,a
+   05DD 60 30              1741 	jz	00104$
+   05DF 90s00r3E           1742 	mov	dptr,#_process_leader_highs_1_1
+   05E2 E0                 1743 	movx	a,@dptr
+   05E3 FE                 1744 	mov	r6,a
+   05E4 A3                 1745 	inc	dptr
+   05E5 E0                 1746 	movx	a,@dptr
+   05E6 FF                 1747 	mov	r7,a
+   05E7 C3                 1748 	clr	c
+   05E8 74 5D              1749 	mov	a,#0x5D
+   05EA 9E                 1750 	subb	a,r6
+   05EB E4                 1751 	clr	a
+   05EC 9F                 1752 	subb	a,r7
+   05ED 40 20              1753 	jc	00104$
+                           1754 ;	main.c:241: period = read_period();
+   05EF C0 07              1755 	push	ar7
+   05F1 C0 06              1756 	push	ar6
+   05F3 12s04r4E           1757 	lcall	_read_period
+   05F6 AD 82              1758 	mov	r5,dpl
+   05F8 D0 06              1759 	pop	ar6
+   05FA D0 07              1760 	pop	ar7
+   05FC 90s00r3B           1761 	mov	dptr,#_process_leader_period_1_1
+   05FF ED                 1762 	mov	a,r5
+   0600 F0                 1763 	movx	@dptr,a
+                           1764 ;	main.c:242: highs += period;
+   0601 7C 00              1765 	mov	r4,#0x00
+   0603 90s00r3E           1766 	mov	dptr,#_process_leader_highs_1_1
+   0606 ED                 1767 	mov	a,r5
+   0607 2E                 1768 	add	a,r6
+   0608 F0                 1769 	movx	@dptr,a
+   0609 EC                 1770 	mov	a,r4
+   060A 3F                 1771 	addc	a,r7
+   060B A3                 1772 	inc	dptr
+   060C F0                 1773 	movx	@dptr,a
+   060D 80 C9              1774 	sjmp	00102$
+   060F                    1775 00104$:
+                           1776 ;	main.c:245: if (highs > MAX_LEADER_HIGHS || highs < MIN_LEADER_HIGHS) {
+   060F 90s00r3E           1777 	mov	dptr,#_process_leader_highs_1_1
+   0612 E0                 1778 	movx	a,@dptr
+   0613 FE                 1779 	mov	r6,a
+   0614 A3                 1780 	inc	dptr
+   0615 E0                 1781 	movx	a,@dptr
+   0616 FF                 1782 	mov	r7,a
+   0617 C3                 1783 	clr	c
+   0618 74 5D              1784 	mov	a,#0x5D
+   061A 9E                 1785 	subb	a,r6
+   061B E4                 1786 	clr	a
+   061C 9F                 1787 	subb	a,r7
+   061D 40 08              1788 	jc	00105$
+   061F EE                 1789 	mov	a,r6
+   0620 94 3E              1790 	subb	a,#0x3E
+   0622 EF                 1791 	mov	a,r7
+   0623 94 00              1792 	subb	a,#0x00
+   0625 50 01              1793 	jnc	00109$
+   0627                    1794 00105$:
+                           1795 ;	main.c:246: return;
+                           1796 ;	main.c:249: while (!period && lows <= MAX_LEADER_LOWS)
+   0627 22                 1797 	ret
+   0628                    1798 00109$:
+   0628 90s00r3B           1799 	mov	dptr,#_process_leader_period_1_1
+   062B E0                 1800 	movx	a,@dptr
+   062C FF                 1801 	mov	r7,a
+   062D 70 37              1802 	jnz	00111$
+   062F 90s00r3C           1803 	mov	dptr,#_process_leader_lows_1_1
+   0632 E0                 1804 	movx	a,@dptr
+   0633 FE                 1805 	mov	r6,a
+   0634 A3                 1806 	inc	dptr
+   0635 E0                 1807 	movx	a,@dptr
+   0636 FF                 1808 	mov	r7,a
+   0637 C3                 1809 	clr	c
+   0638 74 5D              1810 	mov	a,#0x5D
+   063A 9E                 1811 	subb	a,r6
+   063B E4                 1812 	clr	a
+   063C 9F                 1813 	subb	a,r7
+   063D 40 27              1814 	jc	00111$
+                           1815 ;	main.c:251: period = read_period();
+   063F C0 07              1816 	push	ar7
+   0641 C0 06              1817 	push	ar6
+   0643 12s04r4E           1818 	lcall	_read_period
+   0646 AD 82              1819 	mov	r5,dpl
+   0648 D0 06              1820 	pop	ar6
+   064A D0 07              1821 	pop	ar7
+   064C 90s00r3B           1822 	mov	dptr,#_process_leader_period_1_1
+   064F ED                 1823 	mov	a,r5
+   0650 F0                 1824 	movx	@dptr,a
+                           1825 ;	main.c:252: lows += !period;
+   0651 ED                 1826 	mov	a,r5
+   0652 B4 01 00           1827 	cjne	a,#0x01,00131$
+   0655                    1828 00131$:
+   0655 E4                 1829 	clr	a
+   0656 33                 1830 	rlc	a
+   0657 FD                 1831 	mov	r5,a
+   0658 7C 00              1832 	mov	r4,#0x00
+   065A 90s00r3C           1833 	mov	dptr,#_process_leader_lows_1_1
+   065D ED                 1834 	mov	a,r5
+   065E 2E                 1835 	add	a,r6
+   065F F0                 1836 	movx	@dptr,a
+   0660 EC                 1837 	mov	a,r4
+   0661 3F                 1838 	addc	a,r7
+   0662 A3                 1839 	inc	dptr
+   0663 F0                 1840 	movx	@dptr,a
+   0664 80 C2              1841 	sjmp	00109$
+   0666                    1842 00111$:
+                           1843 ;	main.c:255: if (lows > MAX_LEADER_LOWS || lows < MIN_LEADER_LOWS) {
+   0666 90s00r3C           1844 	mov	dptr,#_process_leader_lows_1_1
+   0669 E0                 1845 	movx	a,@dptr
+   066A FE                 1846 	mov	r6,a
+   066B A3                 1847 	inc	dptr
+   066C E0                 1848 	movx	a,@dptr
+   066D FF                 1849 	mov	r7,a
+   066E C3                 1850 	clr	c
+   066F 74 5D              1851 	mov	a,#0x5D
+   0671 9E                 1852 	subb	a,r6
+   0672 E4                 1853 	clr	a
+   0673 9F                 1854 	subb	a,r7
+   0674 40 08              1855 	jc	00112$
+   0676 EE                 1856 	mov	a,r6
+   0677 94 3E              1857 	subb	a,#0x3E
+   0679 EF                 1858 	mov	a,r7
+   067A 94 00              1859 	subb	a,#0x00
+   067C 50 01              1860 	jnc	00113$
+   067E                    1861 00112$:
+                           1862 ;	main.c:256: return;
+   067E 22                 1863 	ret
+   067F                    1864 00113$:
+                           1865 ;	main.c:259: process_body();
+   067F 02s04rCA           1866 	ljmp	_process_body
+                           1867 ;------------------------------------------------------------
+                           1868 ;Allocation info for local variables in function 'main'
+                           1869 ;------------------------------------------------------------
+                           1870 ;__00020004                Allocated with name '_main___00020004_5_12'
+                           1871 ;__00020002                Allocated with name '_main___00020002_3_8'
+                           1872 ;__00030005                Allocated with name '_main___00030005_4_11'
+                           1873 ;msec                      Allocated with name '_main_msec_4_11'
+                           1874 ;wdsv_value                Allocated with name '_main_wdsv_value_3_8'
+                           1875 ;------------------------------------------------------------
+                           1876 ;	main.c:262: void main(void)
+                           1877 ;	-----------------------------------------
+                           1878 ;	 function main
+                           1879 ;	-----------------------------------------
+   0682                    1880 _main:
+                           1881 ;	/mnt/workspace/nRF24LE1_SDK-master/include/inline/watchdog_setup.inc:11: if (!pwr_clk_mgmt_is_clklf_enabled())
+   0682 74 07              1882 	mov	a,#0x07
+   0684 55 AD              1883 	anl	a,_CLKLFCTRL
+   0686 FF                 1884 	mov	r7,a
+   0687 BF 07 0B           1885 	cjne	r7,#0x07,00109$
+                           1886 ;	/mnt/workspace/nRF24LE1_SDK-master/include/inline/watchdog_setup.inc:14: pwr_clk_mgmt_clklf_configure(PWR_CLK_MGMT_CLKLF_CONFIG_OPTION_CLK_SRC_RCOSC32K);
+   068A 75 82 01           1887 	mov	dpl,#0x01
+   068D 12s00r00           1888 	lcall	_pwr_clk_mgmt_clklf_configure
+                           1889 ;	/mnt/workspace/nRF24LE1_SDK-master/include/inline/watchdog_setup.inc:15: pwr_clk_mgmt_wait_until_clklf_is_ready();
+   0690                    1890 00104$:
+   0690 E5 AD              1891 	mov	a,_CLKLFCTRL
+   0692 30 E6 FB           1892 	jnb	acc.6,00104$
+                           1893 ;	main.c:264: watchdog_setup();
+   0695                    1894 00109$:
+                           1895 ;	/mnt/workspace/nRF24LE1_SDK-master/include/inline/watchdog_set_wdsv_count.inc:48: WDSV = (uint8_t)wdsv_value;
+   0695 75 AF 1A           1896 	mov	_WDSV,#0x1A
+                           1897 ;	main.c:49: ((dataByte >> 3) & 1) * LED_TIME_0BIT +
+   0698 75 AF 00           1898 	mov	_WDSV,#0x00
+                           1899 ;	main.c:267: gpio_pins_val_clear(P0, 0xFF);
+   069B E5 80              1900 	mov	a,_P0
+   069D 75 80 00           1901 	mov	_P0,#0x00
+                           1902 ;	main.c:268: gpio_pins_val_clear(P1, 0xFF);
+   06A0 E5 90              1903 	mov	a,_P1
+   06A2 75 90 00           1904 	mov	_P1,#0x00
+                           1905 ;	main.c:273: GPIO_PIN_CONFIG_OPTION_PIN_MODE_OUTPUT_BUFFER_NORMAL_DRIVE_STRENGTH);
+   06A5 90s00r00           1906 	mov	dptr,#_gpio_pin_configure_PARM_2
+   06A8 74 03              1907 	mov	a,#0x03
+   06AA F0                 1908 	movx	@dptr,a
+   06AB 75 82 0C           1909 	mov	dpl,#0x0C
+   06AE 12s00r00           1910 	lcall	_gpio_pin_configure
+                           1911 ;	main.c:278: GPIO_PIN_CONFIG_OPTION_PIN_MODE_OUTPUT_BUFFER_NORMAL_DRIVE_STRENGTH);
+   06B1 90s00r00           1912 	mov	dptr,#_gpio_pin_configure_PARM_2
+   06B4 74 03              1913 	mov	a,#0x03
+   06B6 F0                 1914 	movx	@dptr,a
+   06B7 75 82 0B           1915 	mov	dpl,#0x0B
+   06BA 12s00r00           1916 	lcall	_gpio_pin_configure
+                           1917 ;	main.c:283: GPIO_PIN_CONFIG_OPTION_PIN_MODE_OUTPUT_BUFFER_NORMAL_DRIVE_STRENGTH);
+   06BD 90s00r00           1918 	mov	dptr,#_gpio_pin_configure_PARM_2
+   06C0 74 03              1919 	mov	a,#0x03
+   06C2 F0                 1920 	movx	@dptr,a
+   06C3 75 82 0A           1921 	mov	dpl,#0x0A
+   06C6 12s00r00           1922 	lcall	_gpio_pin_configure
+                           1923 ;	main.c:287: GPIO_PIN_CONFIG_OPTION_PIN_MODE_INPUT_BUFFER_ON_NO_RESISTORS);
+   06C9 90s00r00           1924 	mov	dptr,#_gpio_pin_configure_PARM_2
+   06CC E4                 1925 	clr	a
+   06CD F0                 1926 	movx	@dptr,a
+   06CE 75 82 06           1927 	mov	dpl,#0x06
+   06D1 12s00r00           1928 	lcall	_gpio_pin_configure
+                           1929 ;	main.c:291: PWR_CLK_MGMT_OP_MODE_CONFIG_OPTION_SOME_WAKEUP_PINS_ACTIVE_HIGH);
+   06D4 75 82 04           1930 	mov	dpl,#0x04
+   06D7 12s00r00           1931 	lcall	_pwr_clk_mgmt_op_mode_configure
+                           1932 ;	main.c:293: pwr_clk_mgmt_enter_pwr_mode_active();
+   06DA 75 A4 00           1933 	mov	_PWRDWN,#0x00
+                           1934 ;	main.c:295: process_leader();
+   06DD 12s05rC4           1935 	lcall	_process_leader
+                           1936 ;	main.c:297: pwr_clk_mgmt_wakeup_pins_configure(PWR_CLK_MGMT_WAKEUP_CONFIG_OPTION_INPUT_P0_6_ENABLE);
+   06E0 90 00 40           1937 	mov	dptr,#0x0040
+   06E3 12s00r00           1938 	lcall	_pwr_clk_mgmt_wakeup_pins_configure
+                           1939 ;	main.c:301: PWR_CLK_MGMT_OP_MODE_CONFIG_OPTION_SOME_WAKEUP_PINS_ACTIVE_HIGH);
+   06E6 75 82 06           1940 	mov	dpl,#0x06
+   06E9 12s00r00           1941 	lcall	_pwr_clk_mgmt_op_mode_configure
+                           1942 ;	main.c:303: while(1) {
+   06EC                    1943 00102$:
+                           1944 ;	main.c:304: pwr_clk_mgmt_enter_pwr_mode_deep_sleep();	
+   06EC 75 A4 01           1945 	mov	_PWRDWN,#0x01
+   06EF 80 FB              1946 	sjmp	00102$
+                           1947 	.area CSEG    (CODE)
+                           1948 	.area CONST   (CODE)
+                           1949 	.area XINIT   (CODE)
+                           1950 	.area CABS    (ABS,CODE)

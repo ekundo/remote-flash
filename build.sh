@@ -1,0 +1,1 @@
+make clean && make && sudo nrf24le1_flasher --erase-all --write-flash main.hex --write-ip /mnt/workspace/backup/ip_bkp.img && sudo sh -c 'echo 0 > /sys/bus/usb/devices/1-1.3/authorized; echo 1 > /sys/bus/usb/devices/1-1.3/authorized' && sleep .5 && cu -E / -l /dev/ttyUSB0 -s 57600
