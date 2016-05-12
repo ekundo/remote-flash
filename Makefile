@@ -1,11 +1,9 @@
 CC         := sdcc --std-c99 --verbose
 PACKIHX    := packihx
-HEX2IMAGE  := hex2image 
 CFLAGS     := --opt-code-size --model-large
 LFLAGS     := --code-loc 0x0000 --code-size 0x4000 --xram-loc 0x0000 --xram-size 0x400
 FLASH_SIZE := 16384
 MAIN       := main
-BIN        := main.img
 
 SDK_DIR            := $(shell cd /mnt/workspace/nRF24LE1_SDK-master && pwd)
 INCLUDE            += -I ./
@@ -33,7 +31,6 @@ rel: $(REL_OBJ)
 build:
 	$(CC) $(CFLAGS) $(LDFLAGS) $(REL_OBJ) $(REL_EXTERNAL_FILES)
 	$(PACKIHX) $(MAIN).ihx > $(MAIN).hex
-	$(HEX2IMAGE) -S $(FLASH_SIZE) < $(MAIN).hex > $(BIN)
 	tail -n5 $(MAIN).mem
 
 clean:

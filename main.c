@@ -31,64 +31,30 @@
 #define DATA1_BIT_LOWS 28
 #define MAX_DATA1_BIT_LOWS DATA1_BIT_LOWS * MAX_TOLERANCE
 #define MIN_DATA1_BIT_LOWS DATA1_BIT_LOWS * MIN_TOLERANCE
-#define RESPONSE_TIMEOUT_US 5000
 #define WATCHDOG_TIMEOUT_MS 200
-#define LED_TIME_0BIT 20
-#define LED_TIME_1BIT 50
-#define LED_TIME_2BIT 100
-#define LED_TIME_3BIT 250
-#define LED_TIME_4BIT 500
+#define LED_TIME 20
 
 bool body[BODY_BITS];
 
-void process_response(uint8_t command, uint8_t dataByte)
+void send(uint8_t dataByte)
 {
-	uint16_t delay;
-	if (command == 2) {
-		delay = 
-			((dataByte >> 3) & 1) * LED_TIME_0BIT +
-			((dataByte >> 4) & 1) * LED_TIME_1BIT +
-			((dataByte >> 5) & 1) * LED_TIME_2BIT +
-			((dataByte >> 6) & 1) * LED_TIME_3BIT +
-			((dataByte >> 7) & 1) * LED_TIME_4BIT;
-		gpio_pin_val_write(RED_PIN, ((~dataByte >> 0) & 1));
-		gpio_pin_val_write(GREEN_PIN, ((~dataByte >> 1) & 1));
-		gpio_pin_val_write(BLUE_PIN, ((~dataByte >> 2) & 1));
-		delay_ms(delay);
-		gpio_pin_val_set(RED_PIN);
-		gpio_pin_val_set(GREEN_PIN);
-		gpio_pin_val_set(BLUE_PIN);
-	}
-}
+	uint8_t payload[2] = { dataByte, rng_get_one_byte_and_turn_off() };
 
-void send(uint8_t command, uint8_t dataByte)
-{
-	unsigned long count;
-	uint8_t payload[3] = { command, dataByte, rng_get_one_byte_and_turn_off() };
-
-	rf_write_tx_payload(&payload[0], 3, true);
+	rf_write_tx_payload(&payload[0], 2, true);
 	while(!rf_irq_tx_ds_active() && !rf_irq_max_rt_active());
 	if (rf_irq_tx_ds_active())
 	{
-		rf_flush_rx();
-		rf_flush_tx();
-		rf_irq_clear_all();
-		rf_set_as_rx(true);
-		for(count = 0; count < RESPONSE_TIMEOUT_US && !rf_irq_rx_dr_active(); count++)
-		{
-			nop();
-			nop();
-		}
-		if (rf_irq_rx_dr_active())
-		{
-			rf_read_rx_payload(&payload[0], 3);
-			process_response(payload[0], payload[1]);
-		}		
+		gpio_pin_val_clear(GREEN_PIN);
+		delay_ms(LED_TIME);
+		gpio_pin_val_set(GREEN_PIN);
+	} else {
+		gpio_pin_val_clear(RED_PIN);
+		delay_ms(LED_TIME);
+		gpio_pin_val_set(RED_PIN);
 	}
 	rf_flush_rx();
 	rf_flush_tx();
 	rf_irq_clear_all();
-	rf_set_as_tx();
 }
 
 void init_rf()
@@ -146,7 +112,7 @@ void process_success()
 	}
 
 	init_rf();
-	send(1, dataByte);
+	send(dataByte);
 }
 
 void process_validation()
