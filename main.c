@@ -36,194 +36,14 @@
 
 bool body[BODY_BITS];
 
-void send(uint8_t dataByte)
-{
-	uint8_t payload[2] = { dataByte, rng_get_one_byte_and_turn_off() };
-
-	rf_write_tx_payload(&payload[0], 2, true);
-	while(!rf_irq_tx_ds_active() && !rf_irq_max_rt_active());
-	if (rf_irq_tx_ds_active())
-	{
-		gpio_pin_val_clear(GREEN_PIN);
-		delay_ms(LED_TIME);
-		gpio_pin_val_set(GREEN_PIN);
-	} else {
-		gpio_pin_val_clear(RED_PIN);
-		delay_ms(LED_TIME);
-		gpio_pin_val_set(RED_PIN);
-	}
-	rf_flush_rx();
-	rf_flush_tx();
-	rf_irq_clear_all();
-}
-
-void init_rf()
-{
-	uint8_t pipes[2][5] = {  
-	   {0xB8, 0x25, 0xB9, 0xE1, 0xBD},
-	   {0xD9, 0x02, 0x86, 0xD0, 0xEE}
-	};
-
-	rf_spi_configure_enable();
-
-	rf_configure(
-		RF_CONFIG_EN_CRC | RF_CONFIG_CRCO | RF_CONFIG_PWR_UP,
-		false,
-		RF_EN_AA_ENAA_P0 | RF_EN_AA_ENAA_P1,
-		RF_EN_RXADDR_ERX_P0 | RF_EN_RXADDR_ERX_P1,
-		RF_SETUP_AW_5BYTES,
-		RF_SETUP_RETR_ARD_500 | RF_SETUP_RETR_ARC_15,
-		0x60,
-		RF_RF_SETUP_RF_DR_250_KBPS | RF_RF_SETUP_RF_PWR_0_DBM,
-		&pipes[1][0],
-		&pipes[0][0],
-		0xC3, 
-		0xC4, 
-		0xC5, 
-		0xC6,
-		&pipes[1][0],
-		0x03,
-		0x03,
-		0x00,
-		0x00,
-		0x00,
-		0x00,
-		0x00,
-		0x00);
-}
-
-void process_success()
-{
-	uint8_t customByte = 0;
-	uint8_t dataByte = 0;
-	uint8_t bitNum;
-
-	for (bitNum = 0; bitNum < BODY_CUSTOM_BITS; bitNum++)
-	{
-		customByte += body[bitNum] << bitNum;
-	}
-	for (bitNum = 0; bitNum < BODY_DATA_BITS; bitNum++)
-	{
-		dataByte += body[BODY_CUSTOM_BITS * 2 + bitNum] << bitNum;
-	}
-
-	if (customByte != 7) {
-		return;
-	}
-
-	init_rf();
-	send(dataByte);
-}
-
-void process_validation()
-{
-	uint8_t bitNum;
-	for (bitNum = 0; bitNum < BODY_CUSTOM_BITS; bitNum++)
-	{
-		if (body[bitNum] != body[BODY_CUSTOM_BITS + bitNum]) {
-			return;
-		}
-	}
-	for (bitNum = 0; bitNum < BODY_DATA_BITS; bitNum++)
-	{
-		if (body[BODY_CUSTOM_BITS * 2 + bitNum] ==
-				body[BODY_CUSTOM_BITS * 2 + BODY_DATA_BITS + bitNum]) {
-			return;
-		}
-	}
-
-	process_success();
-}
-
-bool read_period()
-{
-	bool sample = 0;
-	sample = !gpio_pin_val_read(IN_PIN);
-	delay_us(40);
-	return sample;
-}
-
-void process_end()
-{
-	bool period = true;
-	uint16_t highs = 0;
-	while (period && highs <= MAX_BIT_HIGHS) {
-		period = read_period();
-		highs += period;
-	}
-	if (highs > MAX_BIT_HIGHS || highs < MIN_BIT_HIGHS)
-	{
-		return;
-	}
-
-	process_validation();
-}
-
-void process_body()
-{
-	uint8_t bitNum;
-	uint16_t highs;
-	uint16_t lows;
-	for (bitNum = 0; bitNum < BODY_BITS; bitNum++)
-	{
-		bool period = true;
-		highs = 0;
-		while (period && highs <= MAX_BIT_HIGHS) {
-			period = read_period();
-			highs += period;
-		}
-
-		if (highs > MAX_BIT_HIGHS || highs < MIN_BIT_HIGHS)
-		{
-			return;
-		}
-
-		lows = 0;
-		while (!period && lows <= MAX_DATA1_BIT_LOWS) {
-			period = read_period();
-			lows += !period;
-		}
-
-		if (lows > MAX_DATA1_BIT_LOWS ||
-				(lows < MIN_DATA1_BIT_LOWS && lows > MAX_DATA0_BIT_LOWS) ||
-				lows < MIN_DATA0_BIT_LOWS)
-		{
-			return;
-		}
-
-		body[bitNum] = lows >= MIN_DATA1_BIT_LOWS;
-	}
-	process_end();
-}
-
-void process_leader()
-{
-	bool period = true;
-	uint16_t lows = 0;
-	uint16_t highs = 0;
-
-	while (period && highs <= MAX_LEADER_HIGHS)
-	{
-		period = read_period();
-		highs += period;
-	}
-
-	if (highs > MAX_LEADER_HIGHS || highs < MIN_LEADER_HIGHS) {
-		return;
-	}
-
-	while (!period && lows <= MAX_LEADER_LOWS)
-	{
-		period = read_period();
-		lows += !period;
-	}
-
-	if (lows > MAX_LEADER_LOWS || lows < MIN_LEADER_LOWS) {
-		return;
-	}
-
-	process_body();
-}
+void process_leader();
+void process_body();
+void process_end();
+void process_validation();
+void process_success();
+void init_rf();
+void send(uint8_t dataByte);
+bool read_period();
 
 void main(void)
 {
@@ -269,4 +89,193 @@ void main(void)
 	while(1) {
 		pwr_clk_mgmt_enter_pwr_mode_deep_sleep();	
 	}
+}
+
+void process_leader()
+{
+	bool period = true;
+	uint16_t lows = 0;
+	uint16_t highs = 0;
+
+	while (period && highs <= MAX_LEADER_HIGHS)
+	{
+		period = read_period();
+		highs += period;
+	}
+
+	if (highs > MAX_LEADER_HIGHS || highs < MIN_LEADER_HIGHS) {
+		return;
+	}
+
+	while (!period && lows <= MAX_LEADER_LOWS)
+	{
+		period = read_period();
+		lows += !period;
+	}
+
+	if (lows > MAX_LEADER_LOWS || lows < MIN_LEADER_LOWS) {
+		return;
+	}
+
+	process_body();
+}
+
+void process_body()
+{
+	uint8_t bitNum;
+	uint16_t highs;
+	uint16_t lows;
+	for (bitNum = 0; bitNum < BODY_BITS; bitNum++)
+	{
+		bool period = true;
+		highs = 0;
+		while (period && highs <= MAX_BIT_HIGHS) {
+			period = read_period();
+			highs += period;
+		}
+
+		if (highs > MAX_BIT_HIGHS || highs < MIN_BIT_HIGHS)
+		{
+			return;
+		}
+
+		lows = 0;
+		while (!period && lows <= MAX_DATA1_BIT_LOWS) {
+			period = read_period();
+			lows += !period;
+		}
+
+		if (lows > MAX_DATA1_BIT_LOWS ||
+				(lows < MIN_DATA1_BIT_LOWS && lows > MAX_DATA0_BIT_LOWS) ||
+				lows < MIN_DATA0_BIT_LOWS)
+		{
+			return;
+		}
+
+		body[bitNum] = lows >= MIN_DATA1_BIT_LOWS;
+	}
+	process_end();
+}
+
+void process_end()
+{
+	bool period = true;
+	uint16_t highs = 0;
+	while (period && highs <= MAX_BIT_HIGHS) {
+		period = read_period();
+		highs += period;
+	}
+	if (highs > MAX_BIT_HIGHS || highs < MIN_BIT_HIGHS)
+	{
+		return;
+	}
+
+	process_validation();
+}
+
+void process_validation()
+{
+	uint8_t bitNum;
+	for (bitNum = 0; bitNum < BODY_CUSTOM_BITS; bitNum++)
+	{
+		if (body[bitNum] != body[BODY_CUSTOM_BITS + bitNum]) {
+			return;
+		}
+	}
+	for (bitNum = 0; bitNum < BODY_DATA_BITS; bitNum++)
+	{
+		if (body[BODY_CUSTOM_BITS * 2 + bitNum] ==
+				body[BODY_CUSTOM_BITS * 2 + BODY_DATA_BITS + bitNum]) {
+			return;
+		}
+	}
+
+	process_success();
+}
+
+void process_success()
+{
+	uint8_t customByte = 0;
+	uint8_t dataByte = 0;
+	uint8_t bitNum;
+
+	for (bitNum = 0; bitNum < BODY_CUSTOM_BITS; bitNum++)
+	{
+		customByte += body[bitNum] << bitNum;
+	}
+	for (bitNum = 0; bitNum < BODY_DATA_BITS; bitNum++)
+	{
+		dataByte += body[BODY_CUSTOM_BITS * 2 + bitNum] << bitNum;
+	}
+
+	if (customByte != 7) {
+		return;
+	}
+
+	init_rf();
+	send(dataByte);
+}
+
+void init_rf()
+{
+	uint8_t pipes[2][5] = {  
+	   {0xB8, 0x25, 0xB9, 0xE1, 0xBD},
+	   {0xD9, 0x02, 0x86, 0xD0, 0xEE}
+	};
+
+	rf_spi_configure_enable();
+
+	rf_configure(
+		RF_CONFIG_EN_CRC | RF_CONFIG_CRCO | RF_CONFIG_PWR_UP,
+		false,
+		RF_EN_AA_ENAA_P0 | RF_EN_AA_ENAA_P1,
+		RF_EN_RXADDR_ERX_P0 | RF_EN_RXADDR_ERX_P1,
+		RF_SETUP_AW_5BYTES,
+		RF_SETUP_RETR_ARD_500 | RF_SETUP_RETR_ARC_15,
+		0x60,
+		RF_RF_SETUP_RF_DR_250_KBPS | RF_RF_SETUP_RF_PWR_0_DBM,
+		&pipes[1][0],
+		&pipes[0][0],
+		0xC3, 
+		0xC4, 
+		0xC5, 
+		0xC6,
+		&pipes[1][0],
+		0x03,
+		0x03,
+		0x00,
+		0x00,
+		0x00,
+		0x00,
+		0x00,
+		0x00);
+}
+
+void send(uint8_t dataByte)
+{
+	uint8_t payload[2] = { dataByte, rng_get_one_byte_and_turn_off() };
+
+	rf_write_tx_payload(&payload[0], 2, true);
+	while(!rf_irq_tx_ds_active() && !rf_irq_max_rt_active());
+	if (rf_irq_tx_ds_active())
+	{
+		gpio_pin_val_clear(GREEN_PIN);
+		delay_ms(LED_TIME);
+		gpio_pin_val_set(GREEN_PIN);
+	} else {
+		gpio_pin_val_clear(RED_PIN);
+		delay_ms(LED_TIME);
+		gpio_pin_val_set(RED_PIN);
+	}
+	rf_flush_rx();
+	rf_flush_tx();
+	rf_irq_clear_all();
+}
+
+bool read_period()
+{
+	bool sample = 0;
+	sample = !gpio_pin_val_read(IN_PIN);
+	delay_us(40);
+	return sample;
 }
