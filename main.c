@@ -125,9 +125,10 @@ void process_body()
 	uint8_t bitNum;
 	uint16_t highs;
 	uint16_t lows;
+	bool period;
 	for (bitNum = 0; bitNum < BODY_BITS; bitNum++)
 	{
-		bool period = true;
+		period = true;
 		highs = 0;
 		while (period && highs <= MAX_BIT_HIGHS) {
 			period = read_period();
@@ -274,8 +275,7 @@ void send(uint8_t dataByte)
 
 bool read_period()
 {
-	bool sample = 0;
-	sample = !gpio_pin_val_read(IN_PIN);
+	bool sample = !gpio_pin_val_read(IN_PIN);
 	delay_us(40);
 	return sample;
 }
