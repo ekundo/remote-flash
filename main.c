@@ -227,29 +227,29 @@ void init_rf()
 	rf_spi_configure_enable();
 
 	rf_configure(
-		RF_CONFIG_EN_CRC | RF_CONFIG_CRCO | RF_CONFIG_PWR_UP,
-		false,
-		RF_EN_AA_ENAA_P0 | RF_EN_AA_ENAA_P1,
-		RF_EN_RXADDR_ERX_P0 | RF_EN_RXADDR_ERX_P1,
-		RF_SETUP_AW_5BYTES,
-		RF_SETUP_RETR_ARD_500 | RF_SETUP_RETR_ARC_15,
-		0x60,
-		RF_RF_SETUP_RF_DR_250_KBPS | RF_RF_SETUP_RF_PWR_0_DBM,
-		&pipes[1][0],
-		&pipes[0][0],
-		0xC3, 
-		0xC4, 
-		0xC5, 
-		0xC6,
-		&pipes[1][0],
-		0x03,
-		0x03,
-		0x00,
-		0x00,
-		0x00,
-		0x00,
-		0x00,
-		0x00);
+		RF_CONFIG_EN_CRC | RF_CONFIG_CRCO | RF_CONFIG_PWR_UP,	// value for CONFIG register
+		false,													// true to bring up device in active RX mode
+		RF_EN_AA_ENAA_P0 | RF_EN_AA_ENAA_P1,					// value for EN_AA register
+		RF_EN_RXADDR_ERX_P0 | RF_EN_RXADDR_ERX_P1,				// value for EN_RXADDR register
+		RF_SETUP_AW_5BYTES,										// value for SETUP_AW register
+		RF_SETUP_RETR_ARD_500 | RF_SETUP_RETR_ARC_15,			// value for SETUP_RETR register
+		0x60,													// value for RF_CH register
+		RF_RF_SETUP_RF_DR_250_KBPS | RF_RF_SETUP_RF_PWR_0_DBM,	// value for RF_SETUP register
+		&pipes[1][0],											// pointer to array for the RX address for pipe 0
+		&pipes[0][0],											// pointer to array for the RX address for pipe 1
+		0xC3,													// value for RX_ADDR_P2 register
+		0xC4,													// value for RX_ADDR_P3 register
+		0xC5,													// value for RX_ADDR_P4 register
+		0xC6,													// value for RX_ADDR_P5 register
+		&pipes[1][0],											// pointer to array for the TX address
+		0x02,													// value for RX_PW_P0 register
+		0x02,													// value for RX_PW_P1 register
+		0x00,													// value for RX_PW_P2 register
+		0x00,													// value for RX_PW_P3 register
+		0x00,													// value for RX_PW_P4 register
+		0x00,													// value for RX_PW_P5 register
+		0x00,													// value for DYNPD register
+		0x00);													// value for FEATURE register
 }
 
 void send(uint8_t dataByte)
